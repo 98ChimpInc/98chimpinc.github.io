@@ -841,18 +841,18 @@
       transition: background 0.3s, padding 0.3s;
     }
     nav.scrolled .nav-wordmark-svg {
-      height: 48px;
+      height: 67px;
     }
     nav.scrolled .nav-wordmark-svg .wordmark-path,
     nav.scrolled .nav-wordmark-svg .tagline-path {
       opacity: 0;
     }
     .nav-wordmark-svg {
-      transition: height 0.3s ease;
+      transition: height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
     .nav-wordmark-svg .wordmark-path,
     .nav-wordmark-svg .tagline-path {
-      transition: opacity 0.25s ease;
+      transition: opacity 0.4s ease;
     }
 
     /* ── Responsive ───────────────────────────────── */
@@ -893,7 +893,7 @@
       .beta-form { flex-direction: column; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
       .nav-links { display: none; }
-      nav.scrolled .nav-wordmark-svg { height: 38px; }
+      nav.scrolled .nav-wordmark-svg { height: 53px; }
     }
   </style>
 </head>
