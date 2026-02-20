@@ -836,6 +836,22 @@
     .fade-up:nth-child(2) { transition-delay: 0.1s; }
     .fade-up:nth-child(3) { transition-delay: 0.2s; }
 
+    /* ── Pull Quote ──────────────────────────────── */
+    .pull-quote {
+      padding: 80px var(--pad);
+      background: var(--cream);
+    }
+    .pull-quote p {
+      max-width: 700px;
+      margin: 0 auto;
+      font-family: var(--font-primary-display);
+      font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--text);
+      text-align: center;
+    }
+
     /* ── Nav scroll-shrink ────────────────────────── */
     nav {
       transition: background 0.3s, padding 0.3s;
@@ -944,7 +960,7 @@
       </h1>
 
       <p class="hero-lead">
-        Humans share 98% of their DNA with chimpanzees. That remaining 2% gave us language, music, self-awareness, and the remarkable ability to be completely wrong about ourselves... We build tools for that 2%.
+        Humans share 98% of their DNA with chimpanzees. That remaining 2% gave us language, music, the ability to imagine futures that don't exist yet... and the remarkable tendency to be completely wrong about ourselves. We build tools for that 2%.
       </p>
 
       <div class="hero-actions">
@@ -959,7 +975,14 @@
     </div>
   </section>
 
-  <!-- ── Thesis ────────────────────────────────────── -->
+  <!-- ── Pull Quote ────────────────────────────── -->
+  <section class="pull-quote">
+    <p>
+      Your prefrontal cortex is a time machine. It can project you into a future that doesn't exist yet, hold it as a destination, and reverse-engineer a path from here to there. No other species on Earth can do that... and the ones who learn to use it deliberately change everything, starting with themselves.
+    </p>
+  </section>
+
+    <!-- ── Thesis ────────────────────────────────────── -->
   <section class="thesis" id="thesis">
     <div class="thesis-grid">
       <div class="thesis-left fade-up">
@@ -1198,7 +1221,7 @@
       </svg>
     </div>
     <div class="footer-right">
-      © 2026 98Chimp Inc. · <a href="#" style="color: inherit;">Privacy</a> · <a href="#" style="color: inherit;">Terms</a>
+      © 2026 98% Chimp Inc. · <a href="#" style="color: inherit;">Privacy</a> · <a href="#" style="color: inherit;">Terms</a>
     </div>
   </footer>
 
