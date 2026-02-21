@@ -21,16 +21,16 @@
       --orange:    #FF4600;
       --orange-soft: #FF8C5A;
       --orange-pale: #FFF1EB;
-      --green:     #2E8B57;
-      --green-pale: #EBF5EF;
-      --blue:      #2B6CB0;
-      --blue-pale: #EBF2FB;
+      --rose:      #B85C58;
+      --rose-pale: #F2D9D7;
+      --blue:      #4A8DB8;
+      --blue-pale: #D4E6F0;
       --yellow:    #C8960C;
-      --yellow-pale: #FDF6E3;
-      --navy:      #1B1F3B;
-      --navy-pale: #E8E9F0;
-      --teal:      #1B4D6E;
-      --teal-pale: #E6EEF3;
+      --yellow-pale: #F5E8C8;
+      --indigo:      #3B3680;
+      --indigo-pale: #DBD7ED;
+      --meelo-orange:      #E85D10;
+      --meelo-orange-pale: #F8DCC8;
 
       --font-display: 'Cormorant Garamond', Georgia, serif;
       --font-body:    'DM Sans', system-ui, sans-serif;
@@ -513,15 +513,13 @@
       overflow: hidden;
     }
 
-    .product-visual::before {
-      content: attr(data-bg);
-      position: absolute;
-      font-family: var(--font-primary-display);
-      font-size: 12rem;
-      font-weight: 300;
-      opacity: 0.08;
-      letter-spacing: -0.05em;
-    }
+    /* data-bg watermark removed — redundant with real artwork */
+    /* Loomi — Indigo */
+    .card-loomi { background: var(--indigo-pale); }
+    .card-loomi .product-visual { background: var(--indigo-pale); color: var(--indigo); }
+    .card-loomi .product-tag { background: var(--indigo); color: white; }
+    .card-loomi .product-link { color: var(--indigo); border-color: var(--indigo); }
+    .card-loomi .product-link:hover { background: var(--indigo); color: white; }
 
     /* DK Derby — Yellow */
     .card-derby { background: var(--yellow-pale); }
@@ -530,12 +528,12 @@
     .card-derby .product-link { color: var(--yellow); border-color: var(--yellow); }
     .card-derby .product-link:hover { background: var(--yellow); color: white; }
 
-    /* BrainFit — Green */
-    .card-brainfit { background: var(--green-pale); }
-    .card-brainfit .product-visual { background: var(--green-pale); color: var(--green); }
-    .card-brainfit .product-tag { background: var(--green); color: white; }
-    .card-brainfit .product-link { color: var(--green); border-color: var(--green); }
-    .card-brainfit .product-link:hover { background: var(--green); color: white; }
+    /* BrainFit — Rose */
+    .card-brainfit { background: var(--rose-pale); }
+    .card-brainfit .product-visual { background: var(--rose-pale); color: var(--rose); }
+    .card-brainfit .product-tag { background: var(--rose); color: white; }
+    .card-brainfit .product-link { color: var(--rose); border-color: var(--rose); }
+    .card-brainfit .product-link:hover { background: var(--rose); color: white; }
 
     /* Unison — Blue */
     .card-unison { background: var(--blue-pale); }
@@ -544,17 +542,10 @@
     .card-unison .product-link { color: var(--blue); border-color: var(--blue); }
     .card-unison .product-link:hover { background: var(--blue); color: white; }
 
-    /* Loomi — Navy */
-    .card-loomi { background: var(--navy-pale); }
-    .card-loomi .product-visual { background: var(--navy); color: rgba(255,255,255,0.15); }
-    .card-loomi .product-tag { background: var(--navy); color: white; }
-    .card-loomi .product-link { color: var(--navy); border-color: var(--navy); }
-    .card-loomi .product-link:hover { background: var(--navy); color: white; }
-
-    /* Meelo — Teal */
-    .card-meelo { background: var(--teal-pale); }
-    .card-meelo .product-visual { background: var(--teal-pale); color: var(--teal); }
-    .card-meelo .product-tag { background: var(--teal); color: white; }
+    /* Meelo — Orange */
+    .card-meelo { background: var(--meelo-orange-pale); }
+    .card-meelo .product-visual { background: var(--meelo-orange-pale); color: var(--meelo-orange); }
+    .card-meelo .product-tag { background: var(--meelo-orange); color: white; }
     .card-meelo .product-link { color: var(--muted); border-color: var(--muted); cursor: default; opacity: 0.6; }
     .card-meelo .product-link:hover { background: transparent; color: var(--muted); }
 
@@ -599,10 +590,24 @@
       align-self: flex-start;
     }
 
-    .product-emoji {
-      font-size: 6rem;
+    /* Image artwork in visual panels */
+    .product-visual img {
+      max-height: 65%;
+      max-width: 65%;
+      object-fit: contain;
       position: relative;
       z-index: 1;
+    }
+
+    .product-visual img.card-icon {
+      border-radius: 22%;
+      width: 260px;
+      height: 260px;
+      max-height: none;
+      max-width: none;
+      object-fit: contain;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.06);
     }
 
     /* Reverse layout for alternating cards */
@@ -864,6 +869,10 @@
       color: var(--text);
       text-align: center;
     }
+    .pull-quote em {
+      font-style: italic;
+      color: var(--orange);
+    }
 
     /* ── Nav scroll-shrink ────────────────────────── */
     nav {
@@ -904,6 +913,7 @@
       .pillar-divider .handprint-human { height: 40px; }
       .product-card { grid-template-columns: 1fr; min-height: auto; }
       .product-visual { min-height: 200px; }
+      .product-visual img.card-icon { width: 180px; height: 180px; }
       .card-reverse .product-content { order: 1; }
       .card-reverse .product-visual { order: 2; }
       .product-tag {
@@ -984,7 +994,7 @@
   <!-- ── Pull Quote ────────────────────────────── -->
   <section class="pull-quote">
     <p>
-      Your prefrontal cortex is a time machine. It can project you into a future that doesn't exist yet, hold it as a destination, and reverse-engineer a path from here to there. No other species on Earth can do that... and the ones who learn to use it deliberately change everything, starting with themselves.
+      Your prefrontal cortex is a <em>time machine.</em> It can project you into a future that doesn't exist yet, hold it as a destination, and reverse-engineer a path from here to there. No other species on Earth can do that... and the ones who learn to use it <em>deliberately</em> change everything, starting with <em>themselves.</em>
     </p>
   </section>
 
@@ -1054,27 +1064,44 @@
       <h2>Tools for your most<br/>fascinating 2%</h2>
     </div>
 
+    <!-- Loomi -->
+    <div class="product-card card-loomi card-reverse fade-up">
+      <div class="product-visual">
+        <img src="assets/lm-icon.png" alt="Loomi app icon" class="card-icon" />
+      </div>
+      <div class="product-content">
+        <div>
+          <span class="product-tag"><span class="tag-status">Now in Beta</span><span class="tag-category"> · Children's Sleep & Development</span></span>
+          <h3>Loomi</h3>
+          <p>
+            Stories that build confidence while they lull to sleep. Positive affirmations dissolved into bedtime narratives, played over soft melodies... designed to be started and forgotten. Neuroscience has never sounded this much like a lullaby.
+          </p>
+        </div>
+        <a href="https://www.loomi.kids" class="product-link">Explore Loomi →</a>
+      </div>
+    </div>
+
     <!-- DK Derby -->
     <div class="product-card card-derby fade-up">
       <div class="product-content">
         <div>
           <span class="product-tag"><span class="tag-status">Now in Beta</span><span class="tag-category"> · Psychology Game</span></span>
-          <h3>Dunning-Kruger<br/>Derby</h3>
+          <h3>Dunning-Kruger Derby</h3>
           <p>
             Rate your confidence before answering each question, then discover the gap between what you thought you knew and what you actually know. Part game, part mirror... entirely humbling. Science has never been this fun to be wrong about.
           </p>
         </div>
         <a href="#beta" class="product-link">Join the beta →</a>
       </div>
-      <div class="product-visual" data-bg="DK">
-        <span class="product-emoji">🧠</span>
+      <div class="product-visual">
+        <img src="assets/dk-icon.png" alt="DK Derby app icon" class="card-icon" />
       </div>
     </div>
 
     <!-- BrainFit -->
     <div class="product-card card-brainfit card-reverse fade-up">
-      <div class="product-visual" data-bg="BF">
-        <span class="product-emoji">🫀</span>
+      <div class="product-visual">
+        <img src="assets/bf-icon.png" alt="BrainFit app icon" class="card-icon" />
       </div>
       <div class="product-content">
         <div>
@@ -1100,30 +1127,13 @@
         </div>
         <a href="#beta" class="product-link">Get notified →</a>
       </div>
-      <div class="product-visual" data-bg="UN">
-        <span class="product-emoji">🎵</span>
-      </div>
-    </div>
-
-    <!-- Loomi -->
-    <div class="product-card card-loomi card-reverse fade-up">
-      <div class="product-visual" data-bg="LM">
-        <span class="product-emoji">🌙</span>
-      </div>
-      <div class="product-content">
-        <div>
-          <span class="product-tag"><span class="tag-status">Now in Beta</span><span class="tag-category"> · Children's Sleep & Development</span></span>
-          <h3>Loomi</h3>
-          <p>
-            Stories that build confidence while they lull to sleep. Positive affirmations dissolved into bedtime narratives, played over soft melodies... designed to be started and forgotten. Neuroscience has never sounded this much like a lullaby.
-          </p>
-        </div>
-        <a href="https://www.loomi.kids" class="product-link">Explore Loomi →</a>
+      <div class="product-visual">
+        <img src="assets/un-icon.png" alt="Unison app icon" class="card-icon" />
       </div>
     </div>
 
     <!-- Meelo -->
-    <div class="product-card card-meelo fade-up">
+    <div class="product-card card-meelo card-reverse fade-up">
       <div class="product-content">
         <div>
           <span class="product-tag"><span class="tag-status">In Development</span><span class="tag-category"> · Neurodevelopmental Assessment</span></span>
@@ -1134,8 +1144,8 @@
         </div>
         <span class="product-link">Coming soon</span>
       </div>
-      <div class="product-visual" data-bg="ML">
-        <span class="product-emoji">🧩</span>
+      <div class="product-visual">
+        <img src="assets/ml-icon.png" alt="Meelo app icon" class="card-icon" />
       </div>
     </div>
   </section>
