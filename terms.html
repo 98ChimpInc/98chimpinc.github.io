@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Use — 98%Chimp</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:  #F5F1EB;
+      --orange: #FF4600;
+      --dark:   #2C2C2C;
+      --text:   #1a1a1a;
+      --muted:  #888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 32px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      gap: 10px;
+      color: var(--text);
+    }
+
+    .logo-link img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-link span {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .btn-back {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1.5px solid var(--text);
+      border-radius: 100px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--text);
+      color: var(--cream);
+    }
+
+    /* Page Content */
+    .page-content {
+      padding: 24px 0 80px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .last-updated {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      padding: 48px;
+    }
+
+    .intro-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 40px;
+      opacity: 0.85;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--orange);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 16px;
+    }
+
+    li {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 8px;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 7px;
+      height: 7px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--orange);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    a:hover {
+      opacity: 0.7;
+    }
+
+    .legal-notice {
+      margin-top: 20px;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .legal-notice ul {
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .closing-note {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px 0;
+      text-align: center;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: var(--muted);
+    }
+
+    footer a:hover {
+      color: var(--orange);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .page-title { font-size: 2.2rem; }
+      .content-card { padding: 28px 20px; }
+      h2 { font-size: 1.35rem; }
+      h3 { font-size: 0.95rem; }
+      p, li { font-size: 0.9rem; }
+      .legal-notice { padding: 18px; font-size: 0.82rem; }
+      header { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="./index.html" class="logo-link">
+        <img src="assets/favicon-192.png" alt="98%Chimp">
+        <span>98%Chimp</span>
+      </a>
+      <a href="./index.html" class="btn-back">Back to Home</a>
+    </header>
+
+    <main class="page-content">
+      <h1 class="page-title">Terms of Use</h1>
+      <p class="last-updated"><strong>Last Updated:</strong> February 2026</p>
+
+      <div class="content-card">
+        <p class="intro-text">
+          Please read these Terms of Use ("Agreement") carefully before using the 98chimp.com website or any product developed by 98% Chimp Inc.
+        </p>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>
+          By accessing our website or downloading, installing, or using any of our products ("the Products"), you agree to be bound by this Agreement. If you do not agree to these terms, do not use our Products.
+        </p>
+        <p>
+          If you are using a Product on behalf of a minor child, you represent that you are the parent or legal guardian and accept this Agreement on behalf of yourself and your child.
+        </p>
+
+        <h2>2. Scope</h2>
+        <p>
+          This Agreement covers the 98chimp.com website and all products developed by 98% Chimp Inc., including DK Derby, BrainFit, Unison, Loomi, and Meelo. Individual products may have supplementary terms that address product-specific usage. Where product-specific terms exist, they layer on top of this Agreement.
+        </p>
+
+        <h2>3. License Grant</h2>
+        <p>Subject to your compliance with this Agreement, we grant you a limited, non-exclusive, non-transferable, revocable license to:</p>
+        <ul>
+          <li>Access the 98chimp.com website for personal, informational purposes</li>
+          <li>Download and install our apps on devices you own or control</li>
+          <li>Use our Products for personal, non-commercial purposes</li>
+        </ul>
+
+        <h2>4. Restrictions</h2>
+        <p>You agree NOT to:</p>
+        <ul>
+          <li>Copy, modify, or distribute our Products or their content</li>
+          <li>Reverse engineer, decompile, or disassemble any Product</li>
+          <li>Remove any copyright, trademark, or proprietary notices</li>
+          <li>Use any Product for commercial purposes without authorization</li>
+          <li>Share your account credentials with others</li>
+          <li>Circumvent any access controls or usage limits</li>
+          <li>Use any Product in a way that violates applicable laws</li>
+        </ul>
+
+        <h2>5. Content Ownership</h2>
+
+        <h3>Our Content</h3>
+        <p>
+          All content within our Products... including stories, narrations, music, artwork, questions, assessments, algorithms, and interface designs... is owned by 98% Chimp Inc. or our licensors and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or create derivative works without our written permission.
+        </p>
+
+        <h3>Your Use</h3>
+        <p>
+          You may use our content solely for personal, non-commercial purposes through the Products. Downloaded content for offline use remains subject to this Agreement.
+        </p>
+
+        <h2>6. Subscriptions &amp; Purchases</h2>
+
+        <h3>In-App Purchases</h3>
+        <p>
+          Our Products may offer subscriptions or one-time purchases. All purchases are processed through the Apple App Store and are subject to Apple's terms and conditions.
+        </p>
+
+        <h3>Refunds</h3>
+        <p>
+          Refund requests must be directed to Apple, as they process all payments. We do not have access to your payment information.
+        </p>
+
+        <h3>Price Changes</h3>
+        <p>
+          We reserve the right to change subscription prices. You will be notified of any price changes before your next billing cycle.
+        </p>
+
+        <h2>7. Account Termination</h2>
+        <p>We may suspend or terminate your access to our Products if you:</p>
+        <ul>
+          <li>Violate this Agreement</li>
+          <li>Engage in fraudulent or illegal activity</li>
+          <li>Abuse or misuse any Product</li>
+        </ul>
+        <p>You may delete your account at any time through the app settings or by contacting us.</p>
+
+        <h2>8. Disclaimer of Warranties</h2>
+        <div class="legal-notice">
+          OUR PRODUCTS ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. WE DO NOT WARRANT THAT:
+          <ul>
+            <li>Any Product will be uninterrupted or error-free</li>
+            <li>Any Product will meet your specific requirements</li>
+            <li>Any content will achieve particular results</li>
+          </ul>
+          Our Products are designed as tools for self-awareness, learning, and development. They are not medical devices and are not intended to diagnose, treat, cure, or prevent any condition. Meelo is an assessment tool designed to support... not replace... professional clinical judgment.
+        </div>
+
+        <h2>9. Limitation of Liability</h2>
+        <div class="legal-notice">
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, 98% CHIMP INC. SHALL NOT BE LIABLE FOR:
+          <ul>
+            <li>Any indirect, incidental, special, or consequential damages</li>
+            <li>Loss of data, profits, or goodwill</li>
+            <li>Any damages exceeding the amount you paid for the applicable Product in the 12 months preceding the claim</li>
+          </ul>
+        </div>
+
+        <h2>10. Indemnification</h2>
+        <p>You agree to indemnify and hold harmless 98% Chimp Inc. and its officers, directors, employees, and agents from any claims, damages, or expenses arising from:</p>
+        <ul>
+          <li>Your use of our Products</li>
+          <li>Your violation of this Agreement</li>
+          <li>Your violation of any third-party rights</li>
+        </ul>
+
+        <h2>11. Children's Safety</h2>
+        <p>
+          Loomi is designed for children ages 0-6. We are committed to providing safe, age-appropriate content. All stories and affirmations are reviewed for child appropriateness. Loomi contains:
+        </p>
+        <ul>
+          <li>No advertisements</li>
+          <li>No in-app purchases accessible to children</li>
+          <li>No external links accessible to children</li>
+          <li>No social features or user-generated content</li>
+        </ul>
+        <p>Our other Products (DK Derby, BrainFit, Unison, Meelo) are designed for adults and are not intended for use by children under 13.</p>
+
+        <h2>12. Privacy</h2>
+        <p>
+          Your use of our Products is also governed by our <a href="./privacy.html">Privacy Policy</a>. Please review it carefully.
+        </p>
+
+        <h2>13. Updates</h2>
+        <p>
+          We may update our Products from time to time. Some updates may be required for continued use. We are not obligated to provide updates, support, or maintenance.
+        </p>
+
+        <h2>14. Governing Law</h2>
+        <p>
+          This Agreement is governed by the laws of Canada, without regard to conflict of law principles. Any disputes shall be resolved in the courts of British Columbia, Canada.
+        </p>
+
+        <h2>15. Changes to This Agreement</h2>
+        <p>
+          We may modify this Agreement at any time. Continued use of our Products after changes constitutes acceptance of the modified terms. Material changes will be communicated through our Products, website, or via email.
+        </p>
+
+        <h2>16. Severability</h2>
+        <p>
+          If any provision of this Agreement is found unenforceable, the remaining provisions will continue in full force and effect.
+        </p>
+
+        <h2>17. Entire Agreement</h2>
+        <p>
+          This Agreement, together with our Privacy Policy and any product-specific terms, constitutes the entire agreement between you and 98% Chimp Inc. regarding use of our Products.
+        </p>
+
+        <h2>18. Contact Us</h2>
+        <p>For questions about this Agreement, please contact us:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:support@98chimp.com">support@98chimp.com</a><br>
+          <strong>Website:</strong> <a href="https://98chimp.com">https://98chimp.com</a>
+        </p>
+
+        <p class="closing-note">
+          By using any 98% Chimp Inc. product, you acknowledge that you have read, understood, and agree to be bound by this Agreement.
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      © 2026 98% Chimp Inc. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+    </footer>
+  </div>
+
+</body>
+</html>

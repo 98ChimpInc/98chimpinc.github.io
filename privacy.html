@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — 98%Chimp</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:  #F5F1EB;
+      --orange: #FF4600;
+      --dark:   #2C2C2C;
+      --text:   #1a1a1a;
+      --muted:  #888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 32px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      gap: 10px;
+      color: var(--text);
+    }
+
+    .logo-link img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-link span {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .btn-back {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1.5px solid var(--text);
+      border-radius: 100px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--text);
+      color: var(--cream);
+    }
+
+    /* Page Content */
+    .page-content {
+      padding: 24px 0 80px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .last-updated {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      padding: 48px;
+    }
+
+    .intro-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 40px;
+      opacity: 0.85;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--orange);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 16px;
+    }
+
+    li {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 8px;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 7px;
+      height: 7px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .highlight {
+      background: rgba(255, 70, 0, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--orange);
+      font-weight: 500;
+    }
+
+    a {
+      color: var(--orange);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    a:hover {
+      opacity: 0.7;
+    }
+
+    .closing-note {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px 0;
+      text-align: center;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: var(--muted);
+    }
+
+    footer a:hover {
+      color: var(--orange);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .page-title { font-size: 2.2rem; }
+      .content-card { padding: 28px 20px; }
+      h2 { font-size: 1.35rem; }
+      h3 { font-size: 0.95rem; }
+      p, li { font-size: 0.9rem; }
+      header { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="./index.html" class="logo-link">
+        <img src="assets/favicon-192.png" alt="98%Chimp">
+        <span>98%Chimp</span>
+      </a>
+      <a href="./index.html" class="btn-back">Back to Home</a>
+    </header>
+
+    <main class="page-content">
+      <h1 class="page-title">Privacy Policy</h1>
+      <p class="last-updated"><strong>Last Updated:</strong> February 2026</p>
+
+      <div class="content-card">
+        <p class="intro-text">
+          98% Chimp Inc. ("we," "our," or "us") builds neuroscience-grounded tools for self-awareness and development. This Privacy Policy explains how we handle information across our website (98chimp.com) and our family of products... DK Derby, BrainFit, Unison, Loomi, and Meelo.
+        </p>
+
+        <h2>Scope</h2>
+        <p>
+          This policy applies to the 98chimp.com website and all products developed by 98% Chimp Inc. Individual products may have supplementary privacy terms that address product-specific data practices. Where a product-specific policy exists, it layers on top of this one.
+        </p>
+
+        <h2>Our Commitment to Children's Privacy</h2>
+        <p>
+          Loomi is designed for children ages 0-6 and complies with the Children's Online Privacy Protection Act (COPPA) and other applicable privacy laws. <span class="highlight">We do not collect, use, or share personal information from children.</span>
+        </p>
+        <p>
+          For Loomi specifically, child profile information (name and age range) is stored exclusively on the parent's device and is never transmitted to our servers. Our other products are designed for adults and do not knowingly collect information from children under 13.
+        </p>
+
+        <h2>Information We Collect</h2>
+
+        <h3>Through Our Website</h3>
+        <ul>
+          <li><strong>Email address</strong> — If you sign up for a beta program or newsletter, we collect the email you provide</li>
+          <li><strong>Usage data</strong> — Standard web analytics (pages visited, referral source, device type) collected in aggregate</li>
+        </ul>
+
+        <h3>Through Our Apps</h3>
+        <ul>
+          <li><strong>Apple ID authentication</strong> — If you sign in with Apple, we receive only the minimum information necessary (a unique identifier and, optionally, your email)</li>
+          <li><strong>In-app preferences</strong> — Settings and personalization choices you make within each product</li>
+          <li><strong>Assessment data (Meelo)</strong> — Developmental assessment results are stored locally on the device and shared only at the direction of the parent or clinician</li>
+        </ul>
+
+        <h3>Information We Do NOT Collect</h3>
+        <ul>
+          <li>We do <strong>not</strong> collect children's personal information</li>
+          <li>We do <strong>not</strong> collect location data</li>
+          <li>We do <strong>not</strong> collect photos, videos, or voice recordings</li>
+          <li>We do <strong>not</strong> use analytics that track individual children</li>
+          <li>We do <strong>not</strong> sell or share data for advertising purposes</li>
+        </ul>
+
+        <h2>How We Use Information</h2>
+        <p>The limited information we collect is used solely to:</p>
+        <ul>
+          <li>Personalize your experience within our products</li>
+          <li>Manage your account and subscriptions</li>
+          <li>Send beta invitations or product updates you've opted into</li>
+          <li>Provide customer support when you contact us</li>
+          <li>Improve our products through aggregate, anonymized usage patterns</li>
+        </ul>
+
+        <h2>Data Storage</h2>
+        <ul>
+          <li><strong>Local-first approach:</strong> Wherever possible, user data is stored on your device rather than in the cloud</li>
+          <li><strong>Loomi:</strong> Child profiles stored exclusively on-device. No cloud sync of child data</li>
+          <li><strong>Meelo:</strong> Assessment data stored locally on the iPad. Clinicians control any data export</li>
+          <li><strong>Audio content:</strong> Story and audio files may be downloaded for offline use</li>
+        </ul>
+
+        <h2>Third-Party Services</h2>
+        <p>Our products use the following third-party services:</p>
+        <ul>
+          <li><strong>Apple Sign-In</strong> — For secure authentication</li>
+          <li><strong>Apple App Store</strong> — For processing purchases and subscriptions</li>
+        </ul>
+        <p>We do not use third-party advertising networks, sell data to brokers, or integrate social media tracking.</p>
+
+        <h2>Data Sharing</h2>
+        <p>
+          We do <strong>not</strong> sell, trade, or share personal information with third parties for marketing purposes. We may share information only:
+        </p>
+        <ul>
+          <li>When required by law</li>
+          <li>To protect the safety of our users</li>
+          <li>With service providers who assist in operating our products (under strict confidentiality agreements)</li>
+        </ul>
+
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Review any personal information we hold about your account</li>
+          <li>Request deletion of your account and associated data</li>
+          <li>Opt out of marketing communications at any time</li>
+          <li>Request a copy of your data in a portable format</li>
+        </ul>
+        <p>To exercise these rights, contact us at <a href="mailto:privacy@98chimp.com">privacy@98chimp.com</a></p>
+
+        <h2>Data Retention &amp; Security</h2>
+        <ul>
+          <li>Account information is retained while your account is active</li>
+          <li>You may delete your account at any time through app settings or by contacting us</li>
+          <li>Upon account deletion, all associated data is permanently removed</li>
+          <li>We implement industry-standard security measures to protect any information we handle</li>
+        </ul>
+
+        <h2>Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. We will notify you of material changes by posting the updated policy on this page and revising the "Last Updated" date. For significant changes, we may also notify you through our apps or via email.
+        </p>
+
+        <h2>Contact Us</h2>
+        <p>If you have questions about this Privacy Policy or our privacy practices, please contact us:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:privacy@98chimp.com">privacy@98chimp.com</a><br>
+          <strong>Website:</strong> <a href="https://98chimp.com">https://98chimp.com</a>
+        </p>
+
+        <p class="closing-note">
+          98% Chimp Inc. is committed to building tools that respect your privacy as deeply as they respect your brain.
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      © 2026 98% Chimp Inc. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+    </footer>
+  </div>
+
+</body>
+</html>
