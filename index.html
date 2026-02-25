@@ -743,6 +743,26 @@
       margin-bottom: 1.5rem;
     }
 
+    .podcast-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    .podcast-icon {
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .podcast-icon:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
     .about-right p:first-child {
       font-family: var(--font-primary-display);
       font-size: 1.5rem;
@@ -1375,7 +1395,8 @@
           Loomi is built with my brothers Soushiant (social scientist) and Shawn (business strategist)... three dads who asked: what if technology could nurture our kids instead of distracting them?
         </p>
         <p>
-          Beyond the products, I host <a href="#" style="color: var(--orange); border-bottom: 1px solid var(--orange);">The Falcon & The Whale</a> — a podcast exploring the creative and scientific dimensions of understanding ourselves.
+          Beyond the products, I host The Falcon & The Whale — a podcast exploring the creative and scientific dimensions of understanding ourselves.
+          <span class="podcast-links"><a href="https://podcasts.apple.com/ca/podcast/the-falcon-and-the-whale/id1804385057" target="_blank" rel="noopener" aria-label="Listen on Apple Podcasts"><img src="assets/apple-podcasts.svg" alt="Apple Podcasts" class="podcast-icon" /></a><a href="https://open.spotify.com/show/54HxDM833O6ZQJFxOPlEUj" target="_blank" rel="noopener" aria-label="Listen on Spotify"><img src="assets/spotify.svg" alt="Spotify" class="podcast-icon" /></a></span>
         </p>
       </div>
     </div>
