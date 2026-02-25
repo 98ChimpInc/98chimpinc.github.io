@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-Single-file HTML marketing site for the 98%Chimp brand. Showcases four
+Single-file HTML marketing site for the 98%Chimp brand. Showcases five
 neuroscience-grounded products by Shahin Zangenehpour. No framework, no build
 step — vanilla HTML, CSS, and JS only.
 
@@ -25,9 +25,22 @@ and mind. Never use the word "games" to describe the portfolio.
 
 - Single HTML file — no framework, no build process
 - Vanilla CSS with custom properties
-- Vanilla JS (minimal — font switcher, smooth scroll)
+- Vanilla JS (minimal — font switcher, smooth scroll, SVG injection)
 - Google Fonts via `<link>` import
-- Inline SVG for all logo assets
+- External SVG logo (`assets/logo.svg`) injected via `fetch()` at runtime
+
+### Local Development
+
+The site uses `fetch()` to inject the SVG logo, which is blocked by browser
+CORS policy when opening `index.html` directly as a `file://` URL. To preview
+locally, serve via HTTP:
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
+
+The live site at `98chimp.com` (GitHub Pages) works without this limitation.
 
 ---
 
@@ -47,28 +60,42 @@ and mind. Never use the word "games" to describe the portfolio.
 - Body: DM Sans (Google Fonts)
 - Custom property: `--font-primary` (swappable via font switcher)
 
-### Logo — Inline SVG
+### Logo — External SVG (`assets/logo.svg`)
 - Source: Figma export, `viewBox="0 0 560 142"`
-- Nav: height 38px, fill `#FF4600`
-- Footer: height 24px, paths use `currentColor` (renders white)
-- Contains 3 paths: chimp mark, wordmark, tagline text
-- Do not replace with an img tag — keep inline for color control
+- Single file, injected twice via JS `fetch()` into placeholder `<div>`s
+- All 6 paths use `fill="currentColor"` for CSS color control
+- Nav container sets `color: #FF4600` (orange); footer inherits white
+- Path 5 is a knockout shape with `class="knockout-path"` — CSS overrides
+  its fill to match the section background (`--cream` in nav, `--dark` in footer)
+- Paths 2–3 have `class="wordmark-path"`, paths 4–6 have `class="tagline-path"`
+  — used by scroll-shrink JS to fade wordmark/tagline on scroll
+- Nav: height 99px (shrinks to 67px desktop / 53px mobile on scroll)
+- Footer: height 72px
+- Do NOT inline the SVG back into `index.html` — see Token-Conscious File
+  Hygiene in global CLAUDE.md
 
 ---
 
 ## Site Structure
 
 ```
-index.html (98chimp.html)
-├── Nav — logo + navigation links
+index.html
+├── Font Switcher — experimental typeface toggle bar
+├── Nav — logo (injected SVG) + navigation links
 ├── Hero — headline, sub, CTA
-├── Products — four product cards
+├── Pull Quote — prefrontal cortex typographic moment
+├── Thesis — "Our Raison d'Être" two-column section
+├── Pillars — Adapt / Evolve / Thrive with handprint dividers
+├── Products — five product cards
 │   ├── DK Derby
 │   ├── BrainFit
 │   ├── Unison
-│   └── Loomi
-├── About — founder section
-└── Footer — links, logo, tagline
+│   ├── Loomi
+│   └── Meelo
+├── Science Quote — Nathaniel Branden quote block
+├── About — founder section with headshot
+├── Beta CTA — email signup for TestFlight
+└── Footer — logo (injected SVG), copyright, Privacy/Terms links
 ```
 
 ---
@@ -149,9 +176,12 @@ the page loads identically without the switcher.
 
 ## Deployment
 
-- Target: `98chimp.com/dkderby` subdirectory
-- Future: dedicated domain, 301 redirect strategy TBD
-- Privacy policy needed before launch (Firebase analytics disclosure)
+- Hosted on GitHub Pages via `98ChimpInc/98chimpinc.github.io` org repo
+- Custom domain: `98chimp.com` (GoDaddy DNS → GitHub Pages A records)
+- HTTPS enforced via GitHub Pages settings
+- Product landing pages (e.g. DK Derby) go in separate repos under
+  `98ChimpInc` org — auto-route to `98chimp.com/<repo-name>`
+- Privacy policy and Terms of Use pages still needed
 
 ---
 
