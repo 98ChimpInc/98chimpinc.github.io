@@ -891,6 +891,30 @@
       letter-spacing: 0.02em;
     }
 
+    /* Link-out items (beta products) */
+    .interest-link {
+      text-decoration: none;
+      display: block;
+    }
+
+    .interest-card-link:hover {
+      border-color: var(--orange);
+      background: var(--orange-pale);
+    }
+
+    .interest-group-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      padding-top: 0.75rem;
+    }
+
+    .interest-group-label:first-child {
+      padding-top: 0;
+    }
+
     .modal-email {
       display: flex;
       gap: 0.5rem;
@@ -1257,7 +1281,7 @@
           <span class="product-tag"><span class="tag-status">Coming Soon</span><span class="tag-category"> · Emotional Wellness</span></span>
           <h3>BrainFit</h3>
           <p>
-            The first app combining SAM emotion science with Beck's right-hemisphere audio interventions. Track your emotional state, then receive personalized therapeutic guidance designed to meet you exactly where you are... delivered with the warmth of a human voice.
+            The first app combining SAM emotion science with right-hemisphere focused audio interventions. Track your emotional state, then receive personalized therapeutic guidance designed to meet you exactly where you are... delivered with the warmth of a human voice.
           </p>
         </div>
         <a href="#" class="product-link" onclick="openModal();return false;">Get notified →</a>
@@ -1360,9 +1384,9 @@
   <!-- ── Closing CTA ───────────────────────────────── -->
   <section class="closing-cta" id="connect">
     <div class="closing-inner fade-up">
-      <h2>Self-awareness isn't a luxury.<br/>It's the <em>starting point.</em></h2>
+      <h2>What if the most important thing you could study... is <em>yourself?</em></h2>
       <p class="closing-lead">
-        We're building tools for the 2% that makes us human... and we'd love for you to come along.
+        We're building the tools. You bring the curiosity.
       </p>
       <button class="btn-primary" onclick="openModal()">Stay Curious →</button>
       <p class="closing-note">Choose what interests you. We'll only reach out when it matters.</p>
@@ -1377,6 +1401,20 @@
       <p>Pick one or more... we'll only email you about what you choose.</p>
       <form id="notifyForm" onsubmit="return handleNotifySubmit(event)">
         <div class="interest-grid">
+          <span class="interest-group-label">Try now</span>
+          <a href="https://www.loomi.kids" target="_blank" rel="noopener" class="interest-link">
+            <span class="interest-card interest-card-link">
+              <span class="interest-name">Loomi</span>
+              <span class="interest-desc">Now in Beta · loomi.kids ↗</span>
+            </span>
+          </a>
+          <a href="/DKDerby" target="_blank" rel="noopener" class="interest-link">
+            <span class="interest-card interest-card-link">
+              <span class="interest-name">DK Derby</span>
+              <span class="interest-desc">Now in Beta · DKDerby ↗</span>
+            </span>
+          </a>
+          <span class="interest-group-label">Get notified about</span>
           <label class="interest-item">
             <input type="checkbox" name="interests" value="brainfit" />
             <span class="interest-card">
