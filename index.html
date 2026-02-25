@@ -752,28 +752,35 @@
       line-height: 1.6;
     }
 
-    /* ── Beta CTA ─────────────────────────────────── */
-    .beta-cta {
+    /* ── Closing CTA ─────────────────────────────── */
+    .closing-cta {
       padding: 7rem var(--pad);
       background: var(--orange-pale);
       border-top: 1px solid rgba(255,70,0,0.15);
       text-align: center;
     }
 
-    .beta-inner {
+    .closing-inner {
       max-width: 600px;
       margin: 0 auto;
     }
 
-    .beta-inner h2 {
+    .closing-inner h2 {
+      font-family: var(--font-primary-display);
       font-size: clamp(2rem, 4vw, 3.25rem);
       font-weight: 300;
+      font-style: italic;
       letter-spacing: -0.02em;
       margin-bottom: 1rem;
       color: var(--text);
     }
 
-    .beta-inner p {
+    .closing-inner h2 em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .closing-lead {
       font-size: 1.05rem;
       font-weight: 300;
       color: var(--text-mid);
@@ -781,33 +788,146 @@
       line-height: 1.8;
     }
 
-    .beta-form {
-      display: flex;
-      gap: 0.75rem;
-      max-width: 420px;
-      margin: 0 auto;
+    .closing-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 1rem;
     }
 
-    .beta-form input {
+    /* ── Notify Modal ────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: var(--pad);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      border: none;
+      background: none;
+      font-size: 1.5rem;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.25rem;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--text); }
+
+    .modal-content h3 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .modal-content > p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .interest-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .interest-item {
+      cursor: pointer;
+    }
+    .interest-item input { display: none; }
+
+    .interest-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      background: white;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .interest-item input:checked + .interest-card {
+      border-color: var(--orange);
+      background: var(--orange-pale);
+    }
+
+    .interest-name {
+      font-family: var(--font-primary-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .interest-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .modal-email {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .modal-email input[type="email"] {
       flex: 1;
-      padding: 0.85rem 1.25rem;
+      padding: 0.75rem 1rem;
       border: 1.5px solid rgba(0,0,0,0.15);
       border-radius: 100px;
       background: white;
       font-family: var(--font-primary-body);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text);
       outline: none;
       transition: border-color 0.2s;
     }
+    .modal-email input[type="email"]:focus { border-color: var(--orange); }
+    .modal-email input[type="email"]::placeholder { color: var(--muted); }
 
-    .beta-form input:focus { border-color: var(--orange); }
-    .beta-form input::placeholder { color: var(--muted); }
+    .modal-email .btn-primary {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
 
-    .beta-note {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 1rem;
+    .modal-success {
+      text-align: center;
+      padding: 1rem 0;
+      color: var(--orange);
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .modal-email { flex-direction: column; }
+      .modal-content { padding: 2rem 1.5rem; }
     }
 
     /* ── Footer ───────────────────────────────────── */
@@ -849,6 +969,16 @@
       color: rgba(255,255,255,0.3);
       letter-spacing: 0.05em;
     }
+    /* Honeypot field — hidden from humans, visible to bots */
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .footer-maple .maple {
       display: inline-block;
       width: 14px;
@@ -976,7 +1106,7 @@
       <li><a href="#thesis">Our Why</a></li>
       <li><a href="#products">Products</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#beta" class="nav-cta">Join Beta</a></li>
+      <li><a href="#" class="nav-cta" onclick="openModal();return false;">Stay Curious</a></li>
     </ul>
   </nav>
 
@@ -1130,7 +1260,7 @@
             The first app combining SAM emotion science with Beck's right-hemisphere audio interventions. Track your emotional state, then receive personalized therapeutic guidance designed to meet you exactly where you are... delivered with the warmth of a human voice.
           </p>
         </div>
-        <a href="#beta" class="product-link">Get notified →</a>
+        <a href="#" class="product-link" onclick="openModal();return false;">Get notified →</a>
       </div>
     </div>
 
@@ -1144,7 +1274,7 @@
             The brain learns fastest when multiple senses reinforce each other. Unison teaches you to sing on pitch through real-time visual feedback, creating a visual-auditory loop that builds accurate pitch and muscle memory far more effectively than ear training alone.
           </p>
         </div>
-        <a href="#beta" class="product-link">Get notified →</a>
+        <a href="#" class="product-link" onclick="openModal();return false;">Get notified →</a>
       </div>
       <div class="product-visual">
         <img src="assets/un-icon.png" alt="Unison app icon" class="card-icon" />
@@ -1227,21 +1357,70 @@
     </div>
   </section>
 
-  <!-- ── Beta CTA ───────────────────────────────────── -->
-  <section class="beta-cta" id="beta">
-    <div class="beta-inner fade-up">
-      <span class="eyebrow" style="color: var(--orange);">Dunning-Kruger Derby · Beta</span>
-      <h2>Find out how well you<br/>know what you know</h2>
-      <p>
-        Join the TestFlight beta... be among the first to discover your confidence calibration, and help shape the product before public launch.
+  <!-- ── Closing CTA ───────────────────────────────── -->
+  <section class="closing-cta" id="connect">
+    <div class="closing-inner fade-up">
+      <h2>Self-awareness isn't a luxury.<br/>It's the <em>starting point.</em></h2>
+      <p class="closing-lead">
+        We're building tools for the 2% that makes us human... and we'd love for you to come along.
       </p>
-      <div class="beta-form">
-        <input type="email" placeholder="your@email.com" />
-        <button class="btn-primary" type="button">Join beta</button>
-      </div>
-      <p class="beta-note">No spam, ever. Just a TestFlight invite when you're up.</p>
+      <button class="btn-primary" onclick="openModal()">Stay Curious →</button>
+      <p class="closing-note">Choose what interests you. We'll only reach out when it matters.</p>
     </div>
   </section>
+
+  <!-- ── Notify Modal ─────────────────────────────── -->
+  <div class="modal-overlay" id="notifyModal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <h3>What are you curious about?</h3>
+      <p>Pick one or more... we'll only email you about what you choose.</p>
+      <form id="notifyForm" onsubmit="return handleNotifySubmit(event)">
+        <div class="interest-grid">
+          <label class="interest-item">
+            <input type="checkbox" name="interests" value="brainfit" />
+            <span class="interest-card">
+              <span class="interest-name">BrainFit</span>
+              <span class="interest-desc">Coming Soon · Emotional Wellness</span>
+            </span>
+          </label>
+          <label class="interest-item">
+            <input type="checkbox" name="interests" value="unison" />
+            <span class="interest-card">
+              <span class="interest-name">Unison</span>
+              <span class="interest-desc">Coming Soon · Music & Learning</span>
+            </span>
+          </label>
+          <label class="interest-item">
+            <input type="checkbox" name="interests" value="meelo" />
+            <span class="interest-card">
+              <span class="interest-name">Meelo</span>
+              <span class="interest-desc">In Development · Neurodevelopmental Assessment</span>
+            </span>
+          </label>
+          <label class="interest-item">
+            <input type="checkbox" name="interests" value="newsletter" />
+            <span class="interest-card">
+              <span class="interest-name">Newsletter</span>
+              <span class="interest-desc">General 98%Chimp updates</span>
+            </span>
+          </label>
+          <label class="interest-item">
+            <input type="checkbox" name="interests" value="podcast" />
+            <span class="interest-card">
+              <span class="interest-name">The Falcon & The Whale</span>
+              <span class="interest-desc">Podcast episodes</span>
+            </span>
+          </label>
+        </div>
+        <div class="modal-email">
+          <input type="email" name="email" placeholder="your@email.com" required />
+          <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" />
+          <button class="btn-primary" type="submit">Keep me posted</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ── Footer ────────────────────────────────────── -->
   <footer>
@@ -1316,6 +1495,57 @@
       injectSVG('.nav-wordmark-svg', 'assets/logo.svg');
       injectSVG('.footer-wordmark-svg', 'assets/logo.svg');
     })();
+
+
+    /* ── Notify Modal ─────────────────────────────── */
+    function openModal() {
+      document.getElementById('notifyModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('notifyModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function handleNotifySubmit(event) {
+      event.preventDefault();
+
+      // Honeypot check — if filled, it's a bot
+      var honeypot = event.target.querySelector('[name="website"]');
+      if (honeypot && honeypot.value !== '') {
+        console.log('Bot detected — submission rejected');
+        closeModal();
+        return false;
+      }
+
+      // Gather selections
+      var checked = event.target.querySelectorAll('[name="interests"]:checked');
+      var interests = [];
+      checked.forEach(function(cb) { interests.push(cb.value); });
+      var email = event.target.querySelector('[name="email"]').value;
+
+      // TODO: wire up to backend/API
+      console.log('Notify signup:', email, interests);
+
+      // Show confirmation inside modal
+      var content = document.querySelector('.modal-content');
+      content.innerHTML = '<div class="modal-success"><p style="font-size:1.3rem;margin-bottom:0.5rem;">You\'re in.</p><p style="font-size:0.9rem;color:var(--text-mid);font-weight:300;">We\'ll be in touch when it matters.</p></div>';
+
+      // Auto-close after 2.5s
+      setTimeout(function() {
+        closeModal();
+        // Reset modal content for next open
+        setTimeout(function() { location.reload(); }, 300);
+      }, 2500);
+
+      return false;
+    }
   </script>
 
 </body>
