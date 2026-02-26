@@ -935,12 +935,19 @@
       padding-top: 0;
     }
 
+    .modal-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
     .modal-email {
       display: flex;
       gap: 0.5rem;
     }
 
-    .modal-email input[type="email"] {
+    .modal-fields input[type="text"],
+    .modal-fields input[type="email"] {
       flex: 1;
       padding: 0.75rem 1rem;
       border: 1.5px solid rgba(0,0,0,0.15);
@@ -952,8 +959,10 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .modal-email input[type="email"]:focus { border-color: var(--orange); }
-    .modal-email input[type="email"]::placeholder { color: var(--muted); }
+    .modal-fields input[type="text"]:focus,
+    .modal-fields input[type="email"]:focus { border-color: var(--orange); }
+    .modal-fields input[type="text"]::placeholder,
+    .modal-fields input[type="email"]::placeholder { color: var(--muted); }
 
     .modal-email .btn-primary {
       padding: 0.75rem 1.5rem;
@@ -1472,10 +1481,13 @@
             </span>
           </label>
         </div>
-        <div class="modal-email">
-          <input type="email" name="email" placeholder="your@email.com" required />
-          <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" />
-          <button class="btn-primary" type="submit">Keep me posted</button>
+        <div class="modal-fields">
+          <input type="text" name="name" placeholder="Your name" required />
+          <div class="modal-email">
+            <input type="email" name="email" placeholder="your@email.com" required />
+            <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" />
+            <button class="btn-primary" type="submit">Keep me posted</button>
+          </div>
         </div>
       </form>
     </div>
@@ -1587,10 +1599,24 @@
       var checked = event.target.querySelectorAll('[name="interests"]:checked');
       var interests = [];
       checked.forEach(function(cb) { interests.push(cb.value); });
+      var name = event.target.querySelector('[name="name"]').value;
       var email = event.target.querySelector('[name="email"]').value;
 
-      // TODO: wire up to backend/API
-      console.log('Notify signup:', email, interests);
+      // Post to Google Sheet via Apps Script
+      fetch('https://script.google.com/macros/s/AKfycbwvz3ee7GaaToPUrCZ_LcgP34ycoqcXVsCuGmUXWipESvyV0Z5GU4mB3E_h7R3dMfD6FA/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          interests: interests,
+          website: event.target.querySelector('[name="website"]').value,
+          source: '98chimp.ca'
+        })
+      }).catch(function(err) {
+        console.error('Submission failed:', err);
+      });
 
       // Show confirmation inside modal
       var content = document.querySelector('.modal-content');
