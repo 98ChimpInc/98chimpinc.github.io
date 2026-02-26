@@ -3,7 +3,6 @@ function doPost(e) {
   output.setMimeType(ContentService.MimeType.JSON);
 
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     var data = JSON.parse(e.postData.contents);
 
     // Honeypot check — if filled, it's a bot
@@ -15,25 +14,14 @@ function doPost(e) {
       return output;
     }
 
-    // Map interests to individual boolean columns
-    var interests = data.interests || [];
-    sheet.appendRow([
-      new Date(),
-      data.name || '',
-      data.email,
-      interests.indexOf('brainfit') > -1,
-      interests.indexOf('unison') > -1,
-      interests.indexOf('meelo') > -1,
-      interests.indexOf('newsletter') > -1,
-      interests.indexOf('podcast') > -1,
-      data.source || '98chimp.ca'
-    ]);
+    // Route by source
+    var source = data.source || '98chimp.ca';
 
-    // Internal notification
-    sendNotification(data.name, data.email, interests);
-
-    // User confirmation
-    sendConfirmation(data.name, data.email, interests);
+    if (source === 'DKDerby') {
+      handleDKDerby(data);
+    } else {
+      handle98Chimp(data);
+    }
 
     output.setContent(JSON.stringify({
       result: 'success',
@@ -54,8 +42,31 @@ function doGet(e) {
   return ContentService.createTextOutput('98%Chimp Signup API is running.');
 }
 
-// ── Internal notification ──────────────────────────
-function sendNotification(name, email, interests) {
+// ══════════════════════════════════════════════════════
+// 98%Chimp (parent site)
+// ══════════════════════════════════════════════════════
+
+function handle98Chimp(data) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('98%Chimp');
+  var interests = data.interests || [];
+
+  sheet.appendRow([
+    new Date(),
+    data.name || '',
+    data.email,
+    interests.indexOf('brainfit') > -1,
+    interests.indexOf('unison') > -1,
+    interests.indexOf('meelo') > -1,
+    interests.indexOf('newsletter') > -1,
+    interests.indexOf('podcast') > -1,
+    data.source || '98chimp.ca'
+  ]);
+
+  send98ChimpNotification(data.name, data.email, interests);
+  send98ChimpConfirmation(data.name, data.email, interests);
+}
+
+function send98ChimpNotification(name, email, interests) {
   var subject = 'New 98%Chimp signup: ' + (name || email);
   var body = 'New signup on 98chimp.ca\n\n'
     + 'Name: ' + (name || '(not provided)') + '\n'
@@ -69,8 +80,7 @@ function sendNotification(name, email, interests) {
   });
 }
 
-// ── User confirmation ──────────────────────────────
-function sendConfirmation(name, email, interests) {
+function send98ChimpConfirmation(name, email, interests) {
   var greeting = name ? ('Hi ' + name + '!') : 'Hi there!';
   var interestList = interests.length
     ? interests.map(function(i) { return '✦ ' + capitalize(i); }).join('\n')
@@ -113,7 +123,7 @@ function sendConfirmation(name, email, interests) {
 
     // Footer
     + '<tr><td style="padding:20px 40px;border-top:1px solid rgba(0,0,0,0.06);text-align:center;">'
-    + '<p style="color:#999;font-size:12px;margin:0;">© ' + new Date().getFullYear() + ' 98% Chimp Inc.</p>'
+    + '<p style="color:#999;font-size:12px;margin:0;">\u00A9 ' + new Date().getFullYear() + ' 98% Chimp Inc.</p>'
     + '<a href="https://www.98chimp.ca" style="color:#FF4600;font-size:12px;text-decoration:none;">www.98chimp.ca</a>'
     + '</td></tr>'
 
@@ -133,6 +143,106 @@ function sendConfirmation(name, email, interests) {
   });
 }
 
+// ══════════════════════════════════════════════════════
+// DK Derby
+// ══════════════════════════════════════════════════════
+
+function handleDKDerby(data) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('DK Derby');
+
+  sheet.appendRow([
+    new Date(),
+    data.firstName || '',
+    data.email,
+    data.joiningAs || '',
+    data.source || 'DKDerby'
+  ]);
+
+  sendDKDerbyNotification(data.firstName, data.email, data.joiningAs);
+  sendDKDerbyConfirmation(data.firstName, data.email, data.joiningAs);
+}
+
+function sendDKDerbyNotification(name, email, joiningAs) {
+  var subject = 'New DK Derby signup: ' + (name || email);
+  var body = 'New early access signup on DK Derby\n\n'
+    + 'Name: ' + (name || '(not provided)') + '\n'
+    + 'Email: ' + email + '\n'
+    + 'Joining as: ' + (joiningAs || 'not specified') + '\n\n'
+    + 'View all signups: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
+
+  GmailApp.sendEmail('hello@98chimp.com', subject, body, {
+    from: 'hello@98chimp.com',
+    name: 'DK Derby'
+  });
+}
+
+function sendDKDerbyConfirmation(name, email, joiningAs) {
+  var greeting = name ? ('Hi ' + name + '!') : 'Hi there!';
+  var joiningLabel = joiningAs || 'Early access';
+
+  var subject = "You're on the list — DK Derby";
+
+  var htmlBody = '<!DOCTYPE html>'
+    + '<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>'
+    + '<body style="margin:0;padding:0;background:#F5F1EB;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;">'
+    + '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#F5F1EB;">'
+    + '<tr><td align="center" style="padding:40px 20px;">'
+    + '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:540px;background:#ffffff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);">'
+
+    // Header
+    + '<tr><td style="padding:40px 40px 24px;text-align:center;">'
+    + '<span style="color:#E67E22;font-size:28px;font-weight:700;">DK Derby</span>'
+    + '</td></tr>'
+
+    // Greeting
+    + '<tr><td style="padding:0 40px;">'
+    + '<h1 style="color:#1a1a1a;font-size:24px;font-weight:600;margin:0 0 16px;">' + greeting + '</h1>'
+    + '<p style="color:#555;font-size:16px;line-height:1.6;margin:0 0 24px;">'
+    + 'You\'re on the early access list for Dunning-Kruger Derby. '
+    + 'We\'ll notify you the moment it\'s ready. Prepare to be humbled.</p>'
+    + '</td></tr>'
+
+    // Joining-as box
+    + '<tr><td style="padding:0 40px;">'
+    + '<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
+    + '<tr><td style="background:rgba(230,126,34,0.08);border:1px solid rgba(230,126,34,0.2);border-radius:12px;padding:20px;">'
+    + '<p style="color:#1a1a1a;font-size:14px;font-weight:600;margin:0 0 8px;">You signed up as:</p>'
+    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0;">&#10022; ' + joiningLabel + '</p>'
+    + '</td></tr></table>'
+    + '</td></tr>'
+
+    // Sign-off
+    + '<tr><td style="padding:24px 40px 40px;">'
+    + '<p style="color:#555;font-size:14px;line-height:1.6;margin:0;">'
+    + 'No spam. No dark patterns. Just a notification when we launch.</p>'
+    + '<p style="color:#555;font-size:14px;line-height:1.6;margin:8px 0 0;">'
+    + 'Questions? Just reply to this email.</p>'
+    + '</td></tr>'
+
+    // Footer
+    + '<tr><td style="padding:20px 40px;border-top:1px solid rgba(0,0,0,0.06);text-align:center;">'
+    + '<p style="color:#999;font-size:12px;margin:0;">\u00A9 ' + new Date().getFullYear() + ' 98% Chimp Inc.</p>'
+    + '<a href="https://www.98chimp.ca/DKDerby/" style="color:#E67E22;font-size:12px;text-decoration:none;">www.98chimp.ca/DKDerby</a>'
+    + '</td></tr>'
+
+    + '</table></td></tr></table></body></html>';
+
+  var plainBody = greeting + '\n\n'
+    + 'You\'re on the early access list for Dunning-Kruger Derby. '
+    + 'We\'ll notify you the moment it\'s ready. Prepare to be humbled.\n\n'
+    + 'You signed up as: ' + joiningLabel + '\n\n'
+    + 'No spam. No dark patterns. Just a notification when we launch.\n'
+    + 'Questions? Just reply to this email.\n\n'
+    + '— The DK Derby Team\n'
+    + 'www.98chimp.ca/DKDerby';
+
+  GmailApp.sendEmail(email, subject, plainBody, {
+    htmlBody: htmlBody,
+    from: 'hello@98chimp.com',
+    name: 'DK Derby'
+  });
+}
+
 // ── Helpers ────────────────────────────────────────
 function capitalize(str) {
   if (str === 'brainfit') return 'BrainFit';
@@ -143,7 +253,11 @@ function capitalize(str) {
   return str;
 }
 
-// ── Test function ──────────────────────────────────
-function testConfirmation() {
-  sendConfirmation('Test User', 'shahinz@mac.com', ['brainfit', 'podcast']);
+// ── Test functions ─────────────────────────────────
+function test98ChimpConfirmation() {
+  send98ChimpConfirmation('Test User', 'shahinz@mac.com', ['brainfit', 'podcast']);
+}
+
+function testDKDerbyConfirmation() {
+  sendDKDerbyConfirmation('Test User', 'shahinz@mac.com', 'Just curious');
 }
