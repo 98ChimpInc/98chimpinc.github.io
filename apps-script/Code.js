@@ -211,10 +211,24 @@ function sendDKDerbyConfirmation(name, email, joiningAs) {
     + '</td></tr></table>'
     + '</td></tr>'
 
+    // TestFlight CTA
+    + '<tr><td style="padding:24px 40px 0;">'
+    + '<h2 style="color:#1a1a1a;font-size:18px;font-weight:600;margin:0 0 12px;">Get the beta</h2>'
+    + '<p style="color:#555;font-size:14px;line-height:1.6;margin:0 0 20px;">'
+    + 'DK Derby is available now on TestFlight. Tap the button below to join the beta '
+    + '(you\'ll need <a href="https://apps.apple.com/app/testflight/id899247664" style="color:#E67E22;text-decoration:none;">TestFlight</a> installed first).</p>'
+    + '<table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto;">'
+    + '<tr><td align="center" style="border-radius:12px;background:#E67E22;">'
+    + '<a href="https://testflight.apple.com/join/SRWqftSs" target="_blank" '
+    + 'style="display:inline-block;padding:14px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;border-radius:12px;">'
+    + 'Download on TestFlight</a>'
+    + '</td></tr></table>'
+    + '</td></tr>'
+
     // Sign-off
     + '<tr><td style="padding:24px 40px 40px;">'
     + '<p style="color:#555;font-size:14px;line-height:1.6;margin:0;">'
-    + 'No spam. No dark patterns. Just a notification when we launch.</p>'
+    + 'No spam. No dark patterns. Just good vibes and questionable confidence.</p>'
     + '<p style="color:#555;font-size:14px;line-height:1.6;margin:8px 0 0;">'
     + 'Questions? Just reply to this email.</p>'
     + '</td></tr>'
@@ -231,7 +245,11 @@ function sendDKDerbyConfirmation(name, email, joiningAs) {
     + 'You\'re on the early access list for Dunning-Kruger Derby. '
     + 'We\'ll notify you the moment it\'s ready. Prepare to be humbled.\n\n'
     + 'You signed up as: ' + joiningLabel + '\n\n'
-    + 'No spam. No dark patterns. Just a notification when we launch.\n'
+    + 'GET THE BETA\n'
+    + 'DK Derby is available now on TestFlight. Tap the link below to join the beta '
+    + '(you\'ll need TestFlight installed first).\n\n'
+    + 'Download on TestFlight: https://testflight.apple.com/join/SRWqftSs\n\n'
+    + 'No spam. No dark patterns. Just good vibes and questionable confidence.\n'
     + 'Questions? Just reply to this email.\n\n'
     + '— The DK Derby Team\n'
     + 'www.98chimp.ca/DKDerby';
