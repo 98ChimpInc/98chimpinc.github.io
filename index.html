@@ -180,15 +180,14 @@
     .nav-wordmark-svg {
       display: block;
       height: 99px;
-      width: auto;
-      color: #FF4600;
+      max-width: 400px;
+      overflow: hidden;
     }
-    .nav-wordmark-svg svg {
+    .nav-wordmark-svg img {
       display: block;
       height: 100%;
       width: auto;
     }
-    .nav-wordmark-svg .knockout-path { fill: var(--cream); }
 
     .nav-links {
       display: flex;
@@ -1013,12 +1012,11 @@
       height: 72px;
       width: auto;
     }
-    .footer-wordmark-svg svg {
+    .footer-wordmark-svg img {
       display: block;
       height: 100%;
       width: auto;
     }
-    .footer-wordmark-svg .knockout-path { fill: var(--dark); }
 
     .footer-right {
       font-size: 0.8rem;
@@ -1091,17 +1089,11 @@
     }
     nav.scrolled .nav-wordmark-svg {
       height: 67px;
-    }
-    nav.scrolled .nav-wordmark-svg .wordmark-path,
-    nav.scrolled .nav-wordmark-svg .tagline-path {
-      opacity: 0;
+      max-width: 67px;
     }
     .nav-wordmark-svg {
-      transition: height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    .nav-wordmark-svg .wordmark-path,
-    .nav-wordmark-svg .tagline-path {
-      transition: opacity 0.4s ease;
+      transition: height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  max-width 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     /* ── Responsive ───────────────────────────────── */
@@ -1143,7 +1135,7 @@
       .beta-form { flex-direction: column; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
       .nav-links { display: none; }
-      nav.scrolled .nav-wordmark-svg { height: 53px; }
+      nav.scrolled .nav-wordmark-svg { height: 53px; max-width: 53px; }
     }
   </style>
 </head>
@@ -1162,7 +1154,7 @@
   <!-- ── Nav ──────────────────────────────────────── -->
   <nav>
     <a href="#" class="nav-logo">
-      <div class="nav-wordmark-svg" role="img" aria-label="98%Chimp"></div>
+      <div class="nav-wordmark-svg"><img src="assets/98%25ChimpLogoHeader.png" alt="98%Chimp"></div>
     </a>
     <ul class="nav-links">
       <li><a href="#thesis">Our Why</a></li>
@@ -1183,11 +1175,11 @@
       <h1>
         We are<br/>
         <em>98% chimp.</em><br/>
-        That 2% is<br/>everything.
+        That 2% changes<br/>everything.
       </h1>
 
       <p class="hero-lead">
-        Humans share 98% of their DNA with chimpanzees. That remaining 2% gave us language, music, the ability to imagine futures that don't exist yet... and the remarkable tendency to be completely wrong about ourselves. We build tools for that 2%.
+        Somewhere in the space between a chimpanzee and a human being, something extraordinary happened. Not just language or music or the ability to imagine futures that don't exist yet... but something deeper. The universe, through us, began to reflect on itself. We build tools for that reflection.
       </p>
 
       <div class="hero-actions">
@@ -1205,7 +1197,7 @@
   <!-- ── Pull Quote ────────────────────────────── -->
   <section class="pull-quote">
     <p>
-      Your prefrontal cortex is a <em>time machine.</em> It can project you into a future that doesn't exist yet, hold it as a destination, and reverse-engineer a path from here to there. No other species on Earth can do that... and the ones who learn to use it <em>deliberately</em> change everything, starting with <em>themselves.</em>
+      You can close your eyes and imagine a future that doesn't exist yet... hold it, shape it, and work backward until you find a way there. No other species on Earth can do that. From so simple a beginning, something in us learned to <em>reach forward</em>... and the ones who use that ability <em>deliberately</em> change everything, starting with <em>themselves.</em>
     </p>
   </section>
 
@@ -1218,10 +1210,10 @@
       </div>
       <div class="thesis-right fade-up">
         <p>
-          Most of us walk through life with an incomplete picture of ourselves... We overestimate what we know. We misread what we feel. We hear music in our heads that never quite matches what comes out of our mouths.
+          Billions of years of evolution produced something that, as far as we know, has only happened once: a form of matter that can reflect on its own nature. That's what your brain gives you. Not just survival instincts and pattern recognition... but the capacity to wonder, to question, to know that you don't know.
         </p>
         <p>
-          These aren't character flaws. They're features of a brain built for survival, not self-accuracy. The Dunning-Kruger effect, emotional dysregulation, poor pitch discrimination — these are not signs of weakness. They are <strong>starting points.</strong>
+          And yet that same brain comes with beautiful contradictions. We overestimate what we know. We misread what we feel. We hear music in our heads that never quite matches what comes out of our mouths. These aren't flaws. They're <strong>starting points.</strong>
         </p>
         <p>
           98%Chimp builds tools grounded in peer-reviewed neuroscience that close the gap between who you think you are and who you actually are. Not with judgment. With curiosity, data, and the occasional humbling dose of reality.
@@ -1240,7 +1232,7 @@
         <div class="pillar fade-up">
           <div class="pillar-number">01</div>
           <h3>Adapt</h3>
-          <p>Every tool we build begins with a mirror... helping you see the gap between perception and reality, so adaptation becomes possible.</p>
+          <p>Every tool we build begins with a mirror... helping you see the distance between who you think you are and who you actually are, so growth becomes possible.</p>
         </div>
 
         <!-- Handprint divider between 01 and 02 (chimp hand) -->
@@ -1251,7 +1243,7 @@
         <div class="pillar fade-up">
           <div class="pillar-number">02</div>
           <h3>Evolve</h3>
-          <p>Awareness without action is just anxiety. Our tools translate neuroscience into daily habits, feedback loops, and measurable change.</p>
+          <p>Awareness without action is just anxiety. Our tools translate insight into daily habits, feedback loops, and measurable change.</p>
         </div>
 
         <!-- Handprint divider between 02 and 03 (human hand) -->
@@ -1366,6 +1358,10 @@
     <div class="science-inner">
       <span class="eyebrow">The Science Behind It</span>
       <blockquote>
+        "The cosmos is within us. We are made of star-stuff. We are a way for the universe to <em>know itself.</em>"
+      </blockquote>
+      <p class="science-attribution">Carl Sagan</p>
+      <blockquote style="margin-top: 2rem;">
         "The first step toward change is <em>awareness.</em> The second step is <em>acceptance.</em>"
       </blockquote>
       <p class="science-attribution">Nathaniel Branden</p>
@@ -1398,7 +1394,7 @@
           I spent years studying the brain at McGill, then years building software at scale. To outside observers those looked like different lives. They weren't. Both fields are fundamentally about information systems, feedback loops, and emergent behavior. One studies the most complex system we know of. The other builds systems. I saw that from the beginning... it just took the world a little longer to catch up.
         </p>
         <p>
-          What made the science unusual was its vertical range. Early work used molecular markers of gene expression... proteins and mRNAs... to map the functional architecture of the brain at cellular resolution. Later work scaled up to the systems level, using behaviour and neuroimaging (PET and fMRI) to ask the same questions about how the brain integrates information across senses and species. Molecules to cognition, and everything in between.
+          The scientific work spanned scales... from individual molecules inside a single neuron to the whole-brain imaging of perception and behaviour. But the question underneath was always the same: how does this biological system give rise to experience? How does matter begin to feel, to wonder, to know? That question never let go.
         </p>
         <p>
           In 2015, an idea that had been living in my mind since my final years at McGill finally pulled me toward a keyboard. I wanted to build a tool for tracking children's neurodevelopment continuously... not just at annual checkups. The idea was too specific to hand off, so I went to coding school. That project became Meelo. The detour became a career.
@@ -1505,7 +1501,7 @@
   <!-- ── Footer ────────────────────────────────────── -->
   <footer>
     <div class="footer-logo">
-      <div class="footer-wordmark-svg" role="img" aria-label="98%Chimp"></div>
+      <div class="footer-wordmark-svg"><img src="assets/98%25ChimpLogoFooter.png" alt="98%Chimp"></div>
     </div>
     <div class="footer-right">
       © 2015–2026 98% Chimp Inc. · <a href="privacy.html" style="color: inherit;">Privacy</a> · <a href="terms.html" style="color: inherit;">Terms</a>
@@ -1563,18 +1559,6 @@
     })();
 
 
-    /* ── SVG Logo Injection ───────────────────── */
-    (function() {
-      function injectSVG(selector, path) {
-        var el = document.querySelector(selector);
-        if (!el) return;
-        fetch(path)
-          .then(function(r) { return r.text(); })
-          .then(function(svg) { el.innerHTML = svg; });
-      }
-      injectSVG('.nav-wordmark-svg', 'assets/logo.svg');
-      injectSVG('.footer-wordmark-svg', 'assets/logo.svg');
-    })();
 
 
     /* ── Notify Modal ─────────────────────────────── */
