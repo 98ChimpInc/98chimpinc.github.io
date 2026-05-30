@@ -60,7 +60,23 @@ The live site at `98chimp.com` (GitHub Pages) works without this limitation.
 - Body: DM Sans (Google Fonts)
 - Custom property: `--font-primary` (swappable via font switcher)
 
-### Logo — External SVG (`assets/logo.svg`)
+### Logo — canonical brand mark
+
+**The current canonical brand mark is `assets/98%ChimpLogoHeader.png`** (and its
+footer twin `assets/98%ChimpLogoFooter.png`). These are the wordmarks rendered
+with the live brand typeface (Cormorant Garamond) and the current chimp
+illustration. Use these whenever the brand mark needs to appear anywhere —
+documents, presentations, decks, exports.
+
+The previous `assets/logo.svg` is **deprecated** and must not be used for any
+new artefact. It contains the older wordmark from a prior brand iteration. It
+is kept in the repo only to avoid breaking historical references; the live
+`index.html` does not load it.
+
+If a vector version of the current mark is needed, export a fresh SVG from the
+Cormorant-based source rather than reaching for the legacy `logo.svg`.
+
+#### Legacy notes (historical, for context only — applies to deprecated logo.svg)
 - Source: Figma export, `viewBox="0 0 560 142"`
 - Single file, injected twice via JS `fetch()` into placeholder `<div>`s
 - All 6 paths use `fill="currentColor"` for CSS color control
