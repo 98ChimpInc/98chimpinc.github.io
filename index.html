@@ -40,6 +40,8 @@
       --blue-pale: #D4E6F0;
       --yellow:    #C8960C;
       --yellow-pale: #F5E8C8;
+      --dk-ink:      #C85A1C;
+      --dk-paper:    #F2ECE0;
       --indigo:      #3B3680;
       --indigo-pale: #DBD7ED;
       --meelo-orange:      #E85D10;
@@ -533,12 +535,12 @@
     .card-loomi .product-link { color: var(--indigo); border-color: var(--indigo); }
     .card-loomi .product-link:hover { background: var(--indigo); color: white; }
 
-    /* DK Derby — Yellow */
-    .card-derby { background: var(--yellow-pale); }
-    .card-derby .product-visual { background: var(--yellow-pale); color: var(--yellow); }
-    .card-derby .product-tag { background: var(--yellow); color: white; }
-    .card-derby .product-link { color: var(--yellow); border-color: var(--yellow); }
-    .card-derby .product-link:hover { background: var(--yellow); color: white; }
+    /* DK Derby — Warm paper / ink orange */
+    .card-derby { background: var(--dk-paper); }
+    .card-derby .product-visual { background: var(--dk-paper); color: var(--dk-ink); }
+    .card-derby .product-tag { background: var(--dk-ink); color: white; }
+    .card-derby .product-link { color: var(--dk-ink); border-color: var(--dk-ink); }
+    .card-derby .product-link:hover { background: var(--dk-ink); color: white; }
 
     /* BrainFit — Rose */
     .card-brainfit { background: var(--rose-pale); }
@@ -1320,13 +1322,13 @@
     <div class="product-card card-derby fade-up">
       <div class="product-content">
         <div>
-          <span class="product-tag"><span class="tag-status">Now in Beta</span><span class="tag-category"> · Psychology Game</span></span>
-          <h3>Dunning-Kruger Derby</h3>
+          <span class="product-tag"><span class="tag-status">Coming to <span style="text-transform:none">iOS</span></span><span class="tag-category"> · Calibration Game</span></span>
+          <h3>Dunning–Kruger Derby</h3>
           <p>
-            Rate your confidence before answering each question, then discover the gap between what you thought you knew and what you actually know. Part game, part mirror... entirely humbling. Science has never been this fun to be wrong about.
+            A daily game of self-knowledge. Commit to a confidence level before you answer... then watch the gap between what you believe and what's true draw itself on the page. Built on peer-reviewed science. Designed to humble you, gently.
           </p>
         </div>
-        <a href="/DKDerby" class="product-link">Join the beta →</a>
+        <a href="/DKDerby" class="product-link">Join the early list →</a>
       </div>
       <div class="product-visual">
         <img src="assets/dk-icon.png" alt="DK Derby app icon" class="card-icon" />
