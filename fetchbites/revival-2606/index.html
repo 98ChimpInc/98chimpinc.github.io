@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fetch.Bites ... The Revival Brief</title>
+<style>
+  :root{
+    --cream:#FBF7F0; --ink:#2B2520; --soft:#6B6259;
+    --tomato:#E2552C; --tomato-dk:#C44218; --leaf:#3E7C4F; --leaf-bg:#E8F2EA;
+    --gold:#D9A036; --card:#FFFFFF; --line:#E8E0D4; --red:#C0392B; --red-bg:#FBEAE7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--cream);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  h1{font-size:clamp(34px,6vw,54px);letter-spacing:-.02em;line-height:1.1}
+  h2{font-size:clamp(22px,3.5vw,30px);letter-spacing:-.01em;margin-bottom:8px}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tomato);margin-bottom:10px}
+  .lede{font-size:clamp(16px,2.2vw,19px);color:var(--soft);max-width:640px}
+  .pill{display:inline-block;background:var(--leaf-bg);color:var(--leaf);font-weight:600;font-size:13px;
+        padding:4px 12px;border-radius:999px;margin-bottom:18px}
+  /* hero */
+  .hero{padding:72px 0 56px;text-align:left}
+  .hero .tag{color:var(--tomato);font-weight:700}
+  /* step row */
+  .steps{display:flex;gap:0;align-items:stretch;margin-top:34px;flex-wrap:wrap}
+  .step{flex:1 1 180px;background:var(--card);border:1px solid var(--line);border-radius:16px;
+        padding:22px 18px;text-align:center;position:relative;margin:0 18px 12px 0}
+  .step:last-child{margin-right:0}
+  .step .emoji{font-size:34px;display:block;margin-bottom:10px}
+  .step b{display:block;margin-bottom:4px}
+  .step small{color:var(--soft)}
+  .step::after{content:"→";position:absolute;right:-23px;top:50%;transform:translateY(-50%);
+               font-size:20px;color:var(--tomato);font-weight:700}
+  .step:last-child::after{content:""}
+  /* timeline */
+  .timeline{margin-top:30px;position:relative;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:3px;
+                    background:linear-gradient(var(--red),var(--gold),var(--leaf));border-radius:2px}
+  .tl-item{position:relative;margin-bottom:26px}
+  .tl-item::before{content:"";position:absolute;left:-24px;top:6px;width:13px;height:13px;border-radius:50%;
+                   background:var(--card);border:3px solid var(--soft)}
+  .tl-item.bad::before{border-color:var(--red)} .tl-item.mid::before{border-color:var(--gold)}
+  .tl-item.good::before{border-color:var(--leaf)}
+  .tl-item b{display:block} .tl-item span{color:var(--soft);font-size:15px}
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
+  .cardx{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .cardx .emoji{font-size:28px}
+  .cardx h3{font-size:17px;margin:10px 0 6px}
+  .cardx p{font-size:15px;color:var(--soft)}
+  /* diagram */
+  .diagram{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 10px;margin-top:30px;overflow-x:auto}
+  svg{display:block;width:100%;height:auto}
+  .caption{text-align:center;font-size:14px;color:var(--soft);margin-top:12px;padding:0 16px}
+  /* phases */
+  .phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:30px}
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;border-top:5px solid var(--tomato)}
+  .phase:nth-child(2){border-top-color:var(--gold)} .phase:nth-child(3){border-top-color:var(--leaf)}
+  .phase .when{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+  .phase h3{margin:6px 0 8px;font-size:18px}
+  .phase p{font-size:15px;color:var(--soft)}
+  /* ask */
+  .ask{background:var(--ink);color:var(--cream);border-radius:24px;padding:40px 34px;margin:56px 0}
+  .ask h2{color:#fff}
+  .ask ol{margin:18px 0 0 22px}
+  .ask li{margin-bottom:10px}
+  .ask .closer{margin-top:22px;font-size:17px;color:#F4C99B;font-weight:600}
+  footer{padding:28px 0 48px;color:var(--soft);font-size:13px;text-align:center}
+  table.compare{width:100%;border-collapse:collapse;margin-top:26px;background:var(--card);
+                border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+  .compare th,.compare td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line)}
+  .compare th{background:#F4EEE3;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+  .compare tr:last-child td{border-bottom:none}
+  .good-cell{color:var(--leaf);font-weight:600} .bad-cell{color:var(--red);font-weight:600}
+  @media (max-width:640px){
+    .step{margin-right:0}
+    .step::after{content:"↓";right:auto;left:50%;top:auto;bottom:-22px;transform:translateX(-50%)}
+    .step{margin-bottom:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="kicker">Tricycle Labz ... June 2026</div>
+    <h1>Fetch.Bites<br><span class="tag">It's time to bring it back.</span></h1>
+    <p class="lede" style="margin-top:18px">The idea was right. The technology we built still works.
+    The wall that stopped us in 2025 now has a door in it ... and this time, we hold a second key
+    that nobody can take away.</p>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section>
+    <div class="kicker">The Product</div>
+    <h2>From "that looks delicious" to "we made that for dinner"</h2>
+    <p class="lede">People save hundreds of recipes on Instagram and TikTok ... and never find them again.
+    Fetch.Bites turns any recipe post into a clean, beautiful, printable recipe card, saved forever in a personal cookbook.</p>
+    <div class="steps">
+      <div class="step"><span class="emoji">📱</span><b>Spot a recipe</b><small>scrolling Instagram or TikTok</small></div>
+      <div class="step"><span class="emoji">📤</span><b>Send it to us</b><small>one tap ... DM it or Share it</small></div>
+      <div class="step"><span class="emoji">🪄</span><b>We work the magic</b><small>AI reads the post, structures the recipe</small></div>
+      <div class="step"><span class="emoji">🗂️</span><b>Keep it forever</b><small>beautiful card, searchable library</small></div>
+    </div>
+  </section>
+
+  <!-- WHAT HAPPENED -->
+  <section>
+    <div class="kicker">The Honest History</div>
+    <h2>What actually happened in 2025</h2>
+    <div class="timeline">
+      <div class="tl-item bad"><b>February 2025 ... Meta says no</b>
+        <span>We applied for official access to Instagram messaging. Rejected and decommissioned, no reason given.
+        We later learned Meta was tearing out and replacing its entire permission system that exact month ...
+        apps in the queue were rejected in bulk, by machines. Bad timing, not a bad idea.</span></div>
+      <div class="tl-item mid"><b>Spring–Summer 2025 ... the heroic workaround</b>
+        <span>We built a robot that controlled a real phone and tapped through Instagram like a human,
+        with AI reading screenshots. It worked ... but it was slow, costly, fragile, and impossible to scale.</span></div>
+      <div class="tl-item mid"><b>August 2025 ... smart pause</b>
+        <span>We shelved it rather than burn money. The recipe-card designer and the AI recipe brain ...
+        the genuinely hard parts ... were finished and excellent.</span></div>
+      <div class="tl-item good"><b>June 2026 ... the rules changed</b>
+        <span>Three shifts in our favour. That's this brief.</span></div>
+    </div>
+  </section>
+
+  <!-- WHAT CHANGED -->
+  <section>
+    <div class="kicker">Why Now</div>
+    <h2>Three things changed ... all in our favour</h2>
+    <div class="cards">
+      <div class="cardx"><span class="emoji">🚪</span>
+        <h3>Meta rebuilt the front door</h3>
+        <p>The new Instagram system dropped the painful setup that tripped everyone in 2025. Better:
+        we can now test with <b>25 real users with no approval needed at all</b>. Testing first, permission later.</p></div>
+      <div class="cardx"><span class="emoji">🤖</span>
+        <h3>AI hosting became a utility</h3>
+        <p>Anthropic (makers of Claude, our AI) now runs agent infrastructure as a cloud service.
+        The recipe brain costs <b>cents per recipe</b> ... no Mac in a closet, no babysitting.</p></div>
+      <div class="cardx"><span class="emoji">🔑</span>
+        <h3>We found the second key</h3>
+        <p>The phone's own <b>Share button</b> delivers posts straight to our app ... guaranteed by Apple and Google,
+        invisible to Meta, works on TikTok too. No gatekeeper.</p></div>
+    </div>
+  </section>
+
+  <!-- TWO DOORS DIAGRAM -->
+  <section>
+    <div class="kicker">The Strategy, In One Picture</div>
+    <h2>Two doors into one kitchen</h2>
+    <p class="lede">In 2025 we bet everything on a single door that Meta controlled. The new plan has two doors.
+    If Meta ever closes theirs again, we lose a marketing channel ... not the company.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#9B9288"/>
+          </marker>
+          <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#3E7C4F"/>
+          </marker>
+        </defs>
+
+        <!-- user -->
+        <circle cx="90" cy="220" r="46" fill="#F4EEE3" stroke="#E8E0D4" stroke-width="2"/>
+        <text x="90" y="212" text-anchor="middle" font-size="30">🧑‍🍳</text>
+        <text x="90" y="243" text-anchor="middle" font-size="13" font-weight="700" fill="#2B2520">A home cook</text>
+        <text x="90" y="290" text-anchor="middle" font-size="12" fill="#6B6259">sees a recipe post</text>
+
+        <!-- door 1: DM bot -->
+        <rect x="225" y="60" width="250" height="120" rx="16" fill="#FFFFFF" stroke="#D9A036" stroke-width="2.5"/>
+        <text x="350" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#2B2520">Door 1 · DM the bot 💬</text>
+        <text x="350" y="116" text-anchor="middle" font-size="12.5" fill="#6B6259">DMs the post to @fetch.bites,</text>
+        <text x="350" y="134" text-anchor="middle" font-size="12.5" fill="#6B6259">gets a recipe card DM'd back</text>
+        <text x="350" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#D9A036">the viral, delightful door</text>
+
+        <!-- meta gate on door 1 -->
+        <rect x="500" y="78" width="120" height="84" rx="12" fill="#FBEAE7" stroke="#C0392B" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="560" y="108" text-anchor="middle" font-size="20">🚧</text>
+        <text x="560" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#C0392B">Meta's gate</text>
+        <text x="560" y="147" text-anchor="middle" font-size="11" fill="#C0392B">they can open or close</text>
+
+        <!-- door 2: share -->
+        <rect x="225" y="260" width="250" height="120" rx="16" fill="#FFFFFF" stroke="#3E7C4F" stroke-width="2.5"/>
+        <text x="350" y="292" text-anchor="middle" font-size="15" font-weight="700" fill="#2B2520">Door 2 · Share button 📤</text>
+        <text x="350" y="316" text-anchor="middle" font-size="12.5" fill="#6B6259">taps Share → "Save to Fetch.Bites"</text>
+        <text x="350" y="334" text-anchor="middle" font-size="12.5" fill="#6B6259">built into iPhone &amp; Android</text>
+        <text x="350" y="360" text-anchor="middle" font-size="12" font-weight="700" fill="#3E7C4F">the door nobody can close</text>
+
+        <!-- guarantee badge on door 2 -->
+        <rect x="500" y="278" width="120" height="84" rx="12" fill="#E8F2EA" stroke="#3E7C4F" stroke-width="2"/>
+        <text x="560" y="308" text-anchor="middle" font-size="20">✅</text>
+        <text x="560" y="330" text-anchor="middle" font-size="12" font-weight="700" fill="#3E7C4F">guaranteed by</text>
+        <text x="560" y="347" text-anchor="middle" font-size="12" font-weight="700" fill="#3E7C4F">Apple &amp; Google</text>
+
+        <!-- kitchen -->
+        <rect x="668" y="150" width="172" height="140" rx="18" fill="#E2552C"/>
+        <text x="754" y="190" text-anchor="middle" font-size="26">🪄</text>
+        <text x="754" y="218" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">One kitchen</text>
+        <text x="754" y="238" text-anchor="middle" font-size="11.5" fill="#FBD8CB">AI recipe brain + card designer</text>
+        <text x="754" y="255" text-anchor="middle" font-size="11.5" fill="#FBD8CB">(built in 2025, still excellent)</text>
+        <text x="754" y="276" text-anchor="middle" font-size="11.5" fill="#FBD8CB">→ personal cookbook 🗂️</text>
+
+        <!-- arrows -->
+        <line x1="135" y1="195" x2="220" y2="125" stroke="#9B9288" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="135" y1="248" x2="220" y2="316" stroke="#3E7C4F" stroke-width="2.5" marker-end="url(#arrG)"/>
+        <line x1="478" y1="120" x2="497" y2="120" stroke="#9B9288" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="623" y1="120" x2="690" y2="155" stroke="#9B9288" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="478" y1="320" x2="497" y2="320" stroke="#3E7C4F" stroke-width="2.5" marker-end="url(#arrG)"/>
+        <line x1="623" y1="320" x2="690" y2="285" stroke="#3E7C4F" stroke-width="2.5" marker-end="url(#arrG)"/>
+      </svg>
+      <p class="caption">Both doors feed the same kitchen. Door 1 needs Meta's blessing to scale ... Door 2 never asks permission,
+      and it works for TikTok too (which has no door 1 at all).</p>
+    </div>
+  </section>
+
+  <!-- WHY DOOR 2 IS SAFE -->
+  <section>
+    <div class="kicker">The Question Everyone Asks</div>
+    <h2>"Can't Meta block the Share button too?"</h2>
+    <p class="lede">No ... and it's worth understanding why. There is no software trick (and no SDK) that lets one app
+    read another app's messages; phones isolate every app in its own locked room. That's why our 2025 robot was the only
+    workaround, and why it hurt. The Share button is different: it isn't us reaching <i>into</i> Instagram ...
+    it's the <b>phone's operating system</b> handing the post <i>out</i> to us, at the user's request.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+        <defs>
+          <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#C0392B"/>
+          </marker>
+          <marker id="arrG2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#3E7C4F"/>
+          </marker>
+        </defs>
+
+        <!-- left: locked rooms -->
+        <text x="215" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#C0392B">✗ Reaching IN ... impossible by design</text>
+        <rect x="60" y="58" width="140" height="120" rx="14" fill="#FFFFFF" stroke="#E8E0D4" stroke-width="2"/>
+        <text x="130" y="100" text-anchor="middle" font-size="24">📸</text>
+        <text x="130" y="126" text-anchor="middle" font-size="12" font-weight="700">Instagram</text>
+        <text x="130" y="144" text-anchor="middle" font-size="18">🔒</text>
+        <rect x="270" y="58" width="140" height="120" rx="14" fill="#FFFFFF" stroke="#E8E0D4" stroke-width="2"/>
+        <text x="340" y="100" text-anchor="middle" font-size="24">🍳</text>
+        <text x="340" y="126" text-anchor="middle" font-size="12" font-weight="700">Fetch.Bites</text>
+        <text x="340" y="144" text-anchor="middle" font-size="18">🔒</text>
+        <line x1="330" y1="118" x2="210" y2="118" stroke="#C0392B" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#arrR)"/>
+        <text x="235" y="210" text-anchor="middle" font-size="12.5" fill="#6B6259">Every app lives in a locked room.</text>
+        <text x="235" y="228" text-anchor="middle" font-size="12.5" fill="#6B6259">No app can read another's messages.</text>
+        <text x="235" y="246" text-anchor="middle" font-size="12.5" fill="#6B6259">(True for everyone ... including competitors.)</text>
+
+        <!-- divider -->
+        <line x1="455" y1="40" x2="455" y2="260" stroke="#E8E0D4" stroke-width="2"/>
+
+        <!-- right: OS hands out -->
+        <text x="660" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#3E7C4F">✓ Handing OUT ... built into every phone</text>
+        <rect x="495" y="58" width="130" height="120" rx="14" fill="#FFFFFF" stroke="#E8E0D4" stroke-width="2"/>
+        <text x="560" y="100" text-anchor="middle" font-size="24">📸</text>
+        <text x="560" y="126" text-anchor="middle" font-size="12" font-weight="700">Instagram</text>
+        <text x="560" y="146" text-anchor="middle" font-size="11" fill="#6B6259">user taps Share</text>
+        <rect x="643" y="88" width="64" height="60" rx="12" fill="#F4EEE3" stroke="#D9A036" stroke-width="2"/>
+        <text x="675" y="113" text-anchor="middle" font-size="17">🤝</text>
+        <text x="675" y="134" text-anchor="middle" font-size="9.5" font-weight="700" fill="#8a6d1f">the phone</text>
+        <rect x="725" y="58" width="115" height="120" rx="14" fill="#E8F2EA" stroke="#3E7C4F" stroke-width="2"/>
+        <text x="782" y="100" text-anchor="middle" font-size="24">🍳</text>
+        <text x="782" y="126" text-anchor="middle" font-size="12" font-weight="700">Fetch.Bites</text>
+        <text x="782" y="146" text-anchor="middle" font-size="11" fill="#3E7C4F">recipe received ✓</text>
+        <line x1="627" y1="118" x2="641" y2="118" stroke="#3E7C4F" stroke-width="3" marker-end="url(#arrG2)"/>
+        <line x1="709" y1="118" x2="723" y2="118" stroke="#3E7C4F" stroke-width="3" marker-end="url(#arrG2)"/>
+        <text x="660" y="210" text-anchor="middle" font-size="12.5" fill="#6B6259">Apple and Google built this handshake</text>
+        <text x="660" y="228" text-anchor="middle" font-size="12.5" fill="#6B6259">into every phone. Instagram can't see it,</text>
+        <text x="660" y="246" text-anchor="middle" font-size="12.5" fill="#6B6259">throttle it, or turn it off.</text>
+      </svg>
+      <p class="caption">Our 2025 robot tried to pick the lock on the left ... slow, fragile, expensive.
+      The Share button uses the handshake on the right ... instant, free, and dependable.</p>
+    </div>
+
+    <table class="compare">
+      <tr><th></th><th>2025 robot 🤖</th><th>Share button 📤</th></tr>
+      <tr><td>Works every time?</td><td class="bad-cell">No ... broke when Instagram changed looks</td><td class="good-cell">Yes ... built into the phone</td></tr>
+      <tr><td>Speed</td><td class="bad-cell">20+ seconds</td><td class="good-cell">Instant</td></tr>
+      <tr><td>Cost per recipe</td><td class="bad-cell">High (AI read every screen)</td><td class="good-cell">Pennies</td></tr>
+      <tr><td>Can Meta stop it?</td><td class="bad-cell">Yes (and ban the account)</td><td class="good-cell">No</td></tr>
+      <tr><td>Works on TikTok?</td><td class="bad-cell">No</td><td class="good-cell">Yes</td></tr>
+    </table>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <div class="kicker">The Road Ahead</div>
+    <h2>Three phases, each one earns the next</h2>
+    <div class="phases">
+      <div class="phase"><div class="when">Next few weeks</div>
+        <h3>1 · Prove people want it</h3>
+        <p>Private test, up to 25 friends &amp; family, no Meta approval needed. They send recipes, get cards back.
+        We watch: do they come back? Do they tell friends?</p></div>
+      <div class="phase"><div class="when">After demand is proven</div>
+        <h3>2 · The app</h3>
+        <p>A mobile app holding your growing recipe library ... searchable, organised into collections,
+        with the Share button built in. Where the $5–10/month subscription lives.</p></div>
+      <div class="phase"><div class="when">The long game</div>
+        <h3>3 · The gift 🎁</h3>
+        <p>Forty saved family recipes become a <b>printed, hardcover recipe book</b> ... grandma's greatest hits,
+        shipped to the door. Holidays, Mother's Day. High margin, deeply personal. Our card designer already does
+        the hard layout work.</p></div>
+    </div>
+  </section>
+
+  <!-- COST -->
+  <section>
+    <div class="kicker">What It Costs To Find Out</div>
+    <h2>A weekend and a coffee budget</h2>
+    <div class="cards">
+      <div class="cardx"><span class="emoji">💸</span><h3>Money</h3>
+        <p>Developer account: free. AI: cents per recipe. Hosting for the test: trivial.</p></div>
+      <div class="cardx"><span class="emoji">⏱️</span><h3>Time</h3>
+        <p>One weekend to get the private test bot live. A few weeks of porting our 2025 code while testers use it.</p></div>
+      <div class="cardx"><span class="emoji">🎯</span><h3>Risk</h3>
+        <p>One technical unknown: exactly how much detail Instagram hands over with a shared post.
+        We'll know in the first weekend ... before spending anything meaningful.</p></div>
+    </div>
+  </section>
+
+  <!-- ASK -->
+  <div class="ask">
+    <div class="kicker" style="color:#F4C99B">The Ask</div>
+    <h2>Green-light a Phase 1 test</h2>
+    <ol>
+      <li>Set up the new Instagram developer account and a private test bot <i>(one weekend)</i></li>
+      <li>Recruit 10–25 friends and family as testers</li>
+      <li>Run it for 3–4 weeks and watch the numbers</li>
+      <li>Reconvene with real usage data and decide on the app</li>
+    </ol>
+    <p class="closer">We built the hard parts already. The wall that stopped us has a door in it now ...
+    and we're holding a second key. Let's walk through.</p>
+  </div>
+
+  <footer>Fetch.Bites · Tricycle Labz · prepared June 2026</footer>
+</div>
+</body>
+</html>
