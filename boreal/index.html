@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Boreal</title>
+<meta name="description" content="Project Boreal: a pre-registered test of multi-threshold Model III neurons against parameter-matched MLPs. Results summary from the research log.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <div class="site-header__inner">
+    <a class="site-title" href="#top">Project Boreal</a>
+    <span class="pill">Independent research · 2026 · Research log summary</span>
+    <span class="spacer"></span>
+    <nav class="top-links" aria-label="Quick links">
+      <a href="#methods">Methods</a><span class="only-mob" aria-hidden="true">·</span><a href="#limits">Limits</a>
+    </nav>
+  </div>
+</header>
+
+<nav class="sticky-nav only-desk" aria-label="Sections">
+  <div class="sticky-nav__inner">
+    <a href="#idea">Idea</a>
+    <a href="#results">Results</a>
+    <a href="#why">Why it works (partly)</a>
+    <a href="#spacetime">Space × time</a>
+    <a href="#methods">Methods</a>
+    <a href="#limits">Limits</a>
+    <a href="#about">About</a>
+    <a class="sticky-nav__fail" href="#failed">▼ What failed</a>
+  </div>
+</nav>
+
+<details class="mob-nav only-mob">
+  <summary>Sections ▾ <a class="mob-nav__fail" href="#failed">▼ What failed</a></summary>
+  <nav class="mob-nav__links" aria-label="Sections">
+    <a href="#idea">Idea</a>
+    <a href="#results">Results</a>
+    <a href="#why">Why it works (partly)</a>
+    <a href="#spacetime">Space × time</a>
+    <a href="#methods">Methods</a>
+    <a href="#limits">Limits</a>
+    <a href="#about">About</a>
+  </nav>
+</details>
+
+<main>
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__text">
+    <h1 id="hero-title">In a no-convolution MLP setting, a neuron split into independent sub-units beats a parameter-matched MLP… but only once there's enough data, and mostly not for the reason we expected.</h1>
+    <p class="lead only-desk">Project Boreal tests Sardi et al. (2017)'s 'neuron as multiple independent threshold units' as an ANN architecture: K input partitions, K independent thresholds, one hard max. Across ~3,000 seeded runs on MNIST and CIFAR-10, the advantage appears at moderate-to-large training-set sizes, the best K rises <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> as N goes 2,000 → 5,000 → 10,000, and only <span data-v="partition.share.compactness" data-f="p1">12.1%</span> of the best effect is cleanly spatial. Baselines are deliberately weak (no convolution); all claims are relative within that class. The original low-data hypothesis failed… and is reported first.</p>
+    <ul class="chips">
+      <li class="chip-win">CIFAR-10, K=16, N=10,000: <b data-v="cifar.delta.16.10000" data-f="s4">+0.0491</b> vs matched MLP</li>
+      <li>Best K: <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> at N = 2,000 / 5,000 / 10,000</li>
+      <li><span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-corrected · pre-registered</li>
+      <li class="chip-fail">▼ Founding hypothesis: falsified (reported below)</li>
+    </ul>
+    <div class="ctas">
+      <a class="cta" href="#widget1">Explore the neuron ↓</a>
+      <a class="cta cta--fail" href="#failed">Read what failed</a>
+    </div>
+  </div>
+  <figure class="schematic hero__fig only-desk">
+    <div class="schematic__label">SCHEMATIC · NOT DATA</div>
+    <svg viewBox="0 0 440 240" role="img" aria-label="Schematic of a Model III neuron: an input grid split into four lettered groups, each with its own threshold, feeding a hard max; group C wins.">
+      <rect class="f-g0" x="20" y="20" width="158" height="38"/>
+      <rect class="f-g1" x="20" y="60" width="158" height="38"/>
+      <rect class="f-g2" x="20" y="100" width="158" height="38"/>
+      <rect class="f-g3" x="20" y="140" width="158" height="38"/>
+      <path class="f-none s-surface" stroke-width="1.5" d="M40 20V178M60 20V178M80 20V178M99 20V178M119 20V178M139 20V178M159 20V178M20 39H178M20 79H178M20 119H178M20 159H178"/>
+      <text class="t-mono" font-size="12" x="8" y="44">A</text>
+      <text class="t-mono" font-size="12" x="8" y="84">B</text>
+      <text class="t-mono" font-size="12" x="8" y="124">C</text>
+      <text class="t-mono" font-size="12" x="8" y="164">D</text>
+      <path class="f-none s-base" stroke-width="1.5" d="M180 39H230M180 79H230M180 119H230M180 159H230"/>
+      <rect class="f-paper s-base" stroke-width="1" x="230" y="27" width="64" height="24" rx="3"/>
+      <rect class="f-paper s-base" stroke-width="1" x="230" y="67" width="64" height="24" rx="3"/>
+      <rect class="f-paper s-ink" stroke-width="2.5" x="230" y="107" width="64" height="24" rx="3"/>
+      <rect class="f-paper s-base" stroke-width="1" x="230" y="147" width="64" height="24" rx="3"/>
+      <text class="t-mono t-mid" font-size="11" x="262" y="43">θ A</text>
+      <text class="t-mono t-mid" font-size="11" x="262" y="83">θ B</text>
+      <text class="t-mono t-mid t-b" font-size="11" x="262" y="123">θ C</text>
+      <text class="t-mono t-mid" font-size="11" x="262" y="163">θ D</text>
+      <path class="f-none s-base" stroke-width="1.2" stroke-dasharray="3 3" d="M294 39L342 92M294 79L338 104M294 159L342 128"/>
+      <path class="f-none s-ink" stroke-width="2.5" d="M294 119H336"/>
+      <circle class="f-paper s-ink" stroke-width="2" cx="362" cy="110" r="26"/>
+      <text class="t-mono t-mid t-b" font-size="11" x="362" y="114">MAX</text>
+      <path class="f-none s-ink" stroke-width="2" d="M388 110H426M420 104L428 110L420 116"/>
+      <path class="f-none s-fail" stroke-width="1" stroke-dasharray="2 3" d="M300 60V98"/>
+      <text class="t-mono t-fail t-mid" font-size="12" x="300" y="83">✕</text>
+      <text class="t-body t-ink2" font-size="12" x="20" y="198">✕ no cross-group sum before thresholding</text>
+      <text class="t-body t-ink2" font-size="12" x="20" y="214">heavier outline = winning group (C)</text>
+      <text class="t-body t-ink2" font-size="12" x="20" y="230">hard max: strongest group wins; groups do not pool evidence</text>
+    </svg>
+    <figcaption>Model III: K groups, K thresholds, hard max. Groups do not pool evidence.</figcaption>
+  </figure>
+</section>
+
+<section class="thirty" aria-labelledby="thirty-title">
+  <h2 id="thirty-title">In 30 seconds</h2>
+  <ol>
+    <li><span class="thirty__n">1</span><span><b>Scaling law:</b> optimal K tracks N (best K <span class="mono" data-v="cifar.best_k.2000" data-f="i">4</span> → <span class="mono" data-v="cifar.best_k.5000" data-f="i">8</span> → <span class="mono" data-v="cifar.best_k.10000" data-f="i">16</span> at CIFAR N = <span class="mono">2000/5000/10000</span>); crossover points are roughly dataset-invariant (K=4 crosses at N≈<span class="mono">1000-2000</span> on both MNIST and CIFAR).</span></li>
+    <li><span class="thirty__n">2</span><span><b>Mechanism, priced:</b> of PATCHED's <span class="mono" data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span> advantage on CIFAR, <span class="mono" data-v="partition.share.non_spatial" data-f="p1">65.6%</span> survives destroying spatial structure entirely; spatial compactness cleanly accounts for <span class="mono" data-v="partition.share.compactness" data-f="p1">12.1%</span>.</span></li>
+    <li><span class="thirty__n">3</span><span><b>Space × time:</b> spatial partitioning × leaky-spiking temporal persistence interact with an inverted-U in N, peaking at N=<span class="mono">8000</span>… data efficiency, not a higher ceiling.</span></li>
+    <li class="thirty__fail"><span class="thirty__n">▼ 4</span><span><b>What failed:</b> the founding low-N advantage (reversed, <span class="mono" data-v="mnist.delta_k2.300" data-f="s3">-0.131</span> at MNIST N=300); the dead-gradient fix (soft aggregation worse at every N); latching (architecture integrates but cannot latch a discrete fact); CREMA-D real-data gate (failed on video, sweep blocked, gate not relaxed).</span></li>
+  </ol>
+</section>
+
+<p class="lead lead--mob only-mob">Project Boreal tests Sardi et al. (2017)'s 'neuron as multiple independent threshold units' as an ANN architecture: K input partitions, K independent thresholds, one hard max. Across ~3,000 seeded runs on MNIST and CIFAR-10, the advantage appears at moderate-to-large training-set sizes, the best K rises <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> as N goes 2,000 → 5,000 → 10,000, and only <span data-v="partition.share.compactness" data-f="p1">12.1%</span> of the best effect is cleanly spatial. Baselines are deliberately weak (no convolution); all claims are relative within that class. The original low-data hypothesis failed… and is reported first.</p>
+
+<section class="hero-mob only-mob" aria-label="Schematic of a Model III neuron">
+  <figure class="schematic">
+    <div class="schematic__label">SCHEMATIC · NOT DATA</div>
+    <div class="hero-mob__inner">
+      <div class="hero-mob__grid" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="hero-mob__map">
+        <span>A → θ A</span>
+        <span>B → θ B</span>
+        <span><b>C → θ C · wins</b></span>
+        <span>D → θ D</span>
+        <span class="ink2">→ MAX → out</span>
+      </div>
+    </div>
+    <figcaption>Model III: K groups, K thresholds, hard max. Groups do not pool evidence.</figcaption>
+  </figure>
+</section>
+
+<section class="sec sec--idea" id="idea" aria-labelledby="idea-title">
+  <div class="eyebrow">01</div>
+  <h2 id="idea-title">The idea: Model I vs Model III</h2>
+  <div class="idea">
+    <div class="idea__text">
+      <p>A conventional neuron sums all its inputs and applies one threshold. A Model III neuron<sup>¹</sup> first splits its inputs into K disjoint groups. Each group has its own independent threshold. The neuron then outputs the hard max over the groups… the strongest group wins, and groups never pool evidence before thresholding. The extra cost is only (K-1) extra biases per neuron (<span class="mono" data-v="cifar.extra_params.2.pct" data-f="sp3">+0.045%</span> of parameters at CIFAR K=2; <span class="mono" data-v="cifar.extra_params.16.pct" data-f="sp3">+0.675%</span> at K=16), so the comparison against a parameter-matched MLP isolates the neuron model itself.</p>
+      <ol>
+        <li>K disjoint groups of inputs.</li>
+        <li>An independent threshold per group.</li>
+        <li>Hard max: no cross-group summation before thresholding.</li>
+      </ol>
+      <div class="box"><b>What this is not.</b> This is functional, not biophysical, realism: no Hodgkin-Huxley dynamics, morphology, or synaptic physiology. The alternative Model II comparison (the model Sardi et al.'s experiment was designed to exclude) has not been run; we name it here as the clearest gap.</div>
+      <p class="footnote">¹ Based on Sardi et al. (2017), Sci Rep 7, 18036: a neuron behaving as multiple independent threshold units. The connecting insight (Sardi et al. 2017 → ANN architecture) dates to Shahin Zangenehpour's April 2018 article <a href="https://medium.com/@docteurzed/can-old-neurons-teach-us-new-tricks-2f8df9939057">"Can Old Neurons Teach Us New Tricks?"</a>.</p>
+    </div>
+    <div class="idea__figs">
+      <figure class="schematic">
+        <div class="schematic__label">D-A · SCHEMATIC · NOT DATA</div>
+        <svg viewBox="0 0 200 200" role="img" aria-label="Model I: all inputs converge on one threshold and one output.">
+          <rect class="f-base-soft s-base" stroke-width="1" x="10" y="40" width="80" height="80"/>
+          <path class="f-none s-surface" stroke-width="1.5" d="M30 40V120M50 40V120M70 40V120M10 60H90M10 80H90M10 100H90"/>
+          <path class="f-none s-base" stroke-width="1" d="M90 45L130 80M90 80H130M90 115L130 80M90 62L130 80M90 98L130 80"/>
+          <rect class="f-paper s-ink" stroke-width="2" x="130" y="66" width="22" height="28" rx="2"/>
+          <text class="t-mono t-mid" font-size="11" x="141" y="85">θ</text>
+          <path class="f-none s-ink" stroke-width="2" d="M152 80H188M182 74L190 80L182 86"/>
+          <text class="t-mono t-ink2 t-mid" font-size="10" x="141" y="112">1 threshold</text>
+        </svg>
+        <figcaption>Model I: all inputs, one threshold.</figcaption>
+      </figure>
+      <figure class="schematic">
+        <div class="schematic__label">D-B · SCHEMATIC · NOT DATA</div>
+        <svg viewBox="0 0 200 200" role="img" aria-label="Model III: four input groups, four thresholds, a hard max; group C wins.">
+          <rect class="f-g0" x="10" y="40" width="80" height="20"/>
+          <rect class="f-g1" x="10" y="60" width="80" height="20"/>
+          <rect class="f-g2" x="10" y="80" width="80" height="20"/>
+          <rect class="f-g3" x="10" y="100" width="80" height="20"/>
+          <path class="f-none s-surface" stroke-width="1.5" d="M30 40V120M50 40V120M70 40V120"/>
+          <path class="f-none s-base" stroke-width="1" d="M90 50H112M90 70H112M90 90H112M90 110H112"/>
+          <rect class="f-paper s-base" stroke-width="1" x="112" y="43" width="18" height="14"/>
+          <rect class="f-paper s-base" stroke-width="1" x="112" y="63" width="18" height="14"/>
+          <rect class="f-paper s-ink" stroke-width="2" x="112" y="83" width="18" height="14"/>
+          <rect class="f-paper s-base" stroke-width="1" x="112" y="103" width="18" height="14"/>
+          <path class="f-none s-base" stroke-width="1" stroke-dasharray="2 2" d="M130 50L150 76M130 70L148 80M130 110L150 88"/>
+          <path class="f-none s-ink" stroke-width="2" d="M130 90H148"/>
+          <circle class="f-paper s-ink" stroke-width="2" cx="160" cy="82" r="12"/>
+          <text class="t-mono t-mid" font-size="7" x="160" y="85">MAX</text>
+          <path class="f-none s-ink" stroke-width="2" d="M172 82H192M187 77L193 82L187 87"/>
+          <text class="t-mono" font-size="9" x="4" y="54">A</text>
+          <text class="t-mono" font-size="9" x="4" y="74">B</text>
+          <text class="t-mono" font-size="9" x="4" y="94">C</text>
+          <text class="t-mono" font-size="9" x="4" y="114">D</text>
+          <text class="t-mono t-ink2 t-mid" font-size="10" x="121" y="140">4 thresholds</text>
+        </svg>
+        <figcaption>Model III: K groups, K thresholds, hard max. Groups do not pool evidence.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--results" id="results" aria-labelledby="results-title">
+  <div class="eyebrow">02</div>
+  <h2 id="results-title">Results</h2>
+  <p>Every number below is a recorded aggregate. Controls select among precomputed results only; nothing is trained, simulated or interpolated in your browser.</p>
+</section>
+
+<section class="widget widget--first widget--w1" id="widget1" aria-labelledby="w1-title">
+  <div class="widget__wrap">
+    <div class="widget__side">
+      <div class="widget__label">WIDGET 1 · COMPARATOR</div>
+      <h3 id="w1-title">What changes when one neuron becomes K independent threshold units?</h3>
+    </div>
+    <div class="widget__main">
+      <div class="controls">
+        <div class="ctl-row" role="group" aria-labelledby="ctl-arch">
+          <span class="ctl-row__label" id="ctl-arch">Architecture</span>
+          <button type="button" class="btn" data-arch="I" aria-pressed="false" disabled>Model I (MLP)</button>
+          <button type="button" class="btn" data-arch="III" aria-pressed="true" disabled>Model III</button>
+        </div>
+        <div class="ctl-row" role="group" aria-labelledby="ctl-k">
+          <span class="ctl-row__label" id="ctl-k">K</span>
+          <button type="button" class="btn btn--k" data-k="1" aria-pressed="false" disabled>1</button>
+          <button type="button" class="btn btn--k" data-k="2" aria-pressed="false" disabled>2</button>
+          <button type="button" class="btn btn--k" data-k="4" aria-pressed="false" disabled>4</button>
+          <button type="button" class="btn btn--k" data-k="8" aria-pressed="false" disabled>8</button>
+          <button type="button" class="btn btn--k" data-k="16" aria-pressed="true" disabled>16</button>
+          <button type="button" class="btn btn--k" data-k="32" aria-pressed="false" disabled>32</button>
+          <button type="button" class="btn btn--k" data-k="64" aria-pressed="false" disabled>64</button>
+        </div>
+        <div class="ctl-row" role="group" aria-labelledby="ctl-part">
+          <span class="ctl-row__label" id="ctl-part">Partition</span>
+          <button type="button" class="btn btn--part" data-part="DEFAULT" aria-pressed="true" disabled>DEFAULT</button>
+          <button type="button" class="btn btn--part" data-part="PATCHED" aria-pressed="false" disabled>PATCHED</button>
+          <button type="button" class="btn btn--part" data-part="BANDED" aria-pressed="false" disabled>BANDED</button>
+          <button type="button" class="btn btn--part" data-part="SCRAMBLED" aria-pressed="false" disabled>SCRAMBLED</button>
+        </div>
+        <div class="ctl-row" role="group" aria-labelledby="ctl-ds">
+          <span class="ctl-row__label" id="ctl-ds">Dataset</span>
+          <button type="button" class="btn" data-ds="MNIST" aria-pressed="false" disabled>MNIST</button>
+          <button type="button" class="btn" data-ds="CIFAR" aria-pressed="true" disabled>CIFAR-10</button>
+        </div>
+        <div class="ctl-row" role="group" aria-labelledby="ctl-n">
+          <span class="ctl-row__label" id="ctl-n">N (measured grid)</span>
+          <button type="button" class="btn btn--n" data-ni="0" aria-pressed="false" disabled>500</button>
+          <button type="button" class="btn btn--n" data-ni="1" aria-pressed="false" disabled>1,000</button>
+          <button type="button" class="btn btn--n" data-ni="2" aria-pressed="false" disabled>2,000</button>
+          <button type="button" class="btn btn--n" data-ni="3" aria-pressed="false" disabled>5,000</button>
+          <button type="button" class="btn btn--n" data-ni="4" aria-pressed="true" disabled>10,000</button>
+        </div>
+      </div>
+      <p class="load-note" id="w1-load-note" hidden>The interactive controls could not start, so they are off. The default recorded cell is shown.</p>
+
+      <div class="stage">
+        <figure class="schematic stage__fig">
+          <div class="schematic__label" id="w1-stage-label">SCHEMATIC · MODEL III, K=16, DEFAULT</div>
+          <div class="stage__inner" aria-hidden="true">
+            <div class="cells" id="w1-cells"><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g2 win"></div><div class="cell g2 win"></div><div class="cell g2 win"></div><div class="cell g2 win"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g0"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g1"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g2"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div><div class="cell g3"></div></div>
+            <div class="grp-rows">
+              <div class="grp-rows__list" id="w1-rows"><div class="grp-row"><span class="grp-row__sw g0"></span><span class="grp-row__id">A</span><span class="grp-row__track"><span class="grp-row__fill" style="width:42%"></span><span class="grp-row__tick" style="left:55%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row"><span class="grp-row__sw g1"></span><span class="grp-row__id">B</span><span class="grp-row__track"><span class="grp-row__fill" style="width:30%"></span><span class="grp-row__tick" style="left:48%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row grp-row--win"><span class="grp-row__sw g2"></span><span class="grp-row__id">C</span><span class="grp-row__track"><span class="grp-row__fill" style="width:84%"></span><span class="grp-row__tick" style="left:52%"></span></span><span class="grp-row__tag">wins</span></div><div class="grp-row"><span class="grp-row__sw g3"></span><span class="grp-row__id">D</span><span class="grp-row__track"><span class="grp-row__fill" style="width:55%"></span><span class="grp-row__tick" style="left:62%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row"><span class="grp-row__sw g0"></span><span class="grp-row__id">E</span><span class="grp-row__track"><span class="grp-row__fill" style="width:26%"></span><span class="grp-row__tick" style="left:45%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row"><span class="grp-row__sw g1"></span><span class="grp-row__id">F</span><span class="grp-row__track"><span class="grp-row__fill" style="width:61%"></span><span class="grp-row__tick" style="left:66%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row"><span class="grp-row__sw g2"></span><span class="grp-row__id">G</span><span class="grp-row__track"><span class="grp-row__fill" style="width:36%"></span><span class="grp-row__tick" style="left:50%"></span></span><span class="grp-row__tag"></span></div><div class="grp-row"><span class="grp-row__sw g3"></span><span class="grp-row__id">H</span><span class="grp-row__track"><span class="grp-row__fill" style="width:50%"></span><span class="grp-row__tick" style="left:58%"></span></span><span class="grp-row__tag"></span></div></div>
+              <div class="grp-more" id="w1-more">+ 8 more groups, each with its own threshold</div>
+            </div>
+          </div>
+          <figcaption><span id="w1-caption-lead">hard max: strongest group wins; groups do not pool evidence.</span> Bars and ticks are illustrative (each group's own threshold); schematic: illustrates the mechanism, not measured data.</figcaption>
+        </figure>
+        <div class="panel panel--measured" id="w1-panel" aria-live="polite">
+          <div class="panel__head" id="w1-head">CIFAR-10 · K=16 · N=10,000</div>
+          <div class="panel__value" id="w1-value">▲ <span data-v="partition.delta.DEFAULT" data-f="s4">+0.0491</span></div>
+          <div class="panel__sub" id="w1-sub">vs parameter-matched MLP · largest on the K × N grid</div>
+          <div class="panel__lines" id="w1-lines"><div>DEFAULT (contiguous slices) accuracy <span data-v="partition.acc.DEFAULT" data-f="f4">0.4807</span> · MLP <span data-v="partition.acc.MLP" data-f="f4">0.4315</span></div><div>K16 &gt; K8 at N=10000: <span data-v="cifar.tests.k16_vs_k8_10000.diff" data-f="s4">+0.0041</span>, p=<span data-v="cifar.tests.k16_vs_k8_10000.p" data-f="e">5.1e-03</span></div></div>
+          <p class="panel__low" id="w1-low" hidden>The founding hypothesis predicted the opposite. It failed here.</p>
+          <div class="panel__foot">
+            <div>Extra parameters at this K: <span id="w1-params" data-v="cifar.extra_params.16.pct" data-f="sp3">+0.675%</span></div>
+            <div id="w1-src"><span data-v="meta.seeds" data-f="i">30</span> seeds · paired t-tests, Holm-Bonferroni</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="verdict"><b>Verdict.</b> Groups do not pool evidence: the strongest direction wins.</p>
+      <details class="exact">
+        <summary>Exact numbers &amp; protocol</summary>
+        <div class="exact__body">
+          <span>MNIST, Model III K=2 vs parameter-matched MLP (Exp 1, <span data-v="mnist.trials" data-f="i">450</span>/<span data-v="mnist.trials" data-f="i">450</span> trials): N=300 <span data-v="mnist.delta_k2.300" data-f="s3">-0.131</span> · 1000 <span data-v="mnist.delta_k2.1000" data-f="s4">+0.0035</span> · 2000 <span data-v="mnist.delta_k2.2000" data-f="s4">+0.0102</span> (peak) · 5000 <span data-v="mnist.delta_k2.5000" data-f="s4">+0.0073</span> · 10000 <span data-v="mnist.delta_k2.10000" data-f="s4">+0.0034</span>. MLP tops at <span data-v="mnist.mlp_top" data-f="f4">0.9578</span>.</span>
+          <span>MNIST, K=4 (Exp 1): N=300 <span data-v="mnist.delta_k4.300" data-f="s3">-0.328</span> · 1000 <span data-v="mnist.delta_k4.1000" data-f="s4">-0.0343</span> · 2000 <span data-v="mnist.delta_k4.2000" data-f="s4">+0.0067</span> · 5000 <span data-v="mnist.delta_k4.5000" data-f="s4">+0.0062</span> · 10000 <span data-v="mnist.delta_k4.10000" data-f="s4">+0.0020</span>.</span>
+          <span>CIFAR-10 (no convolution; MLP tops at <span data-v="cifar.mlp_top" data-f="f4">0.4315</span>), Exp 3: K=2 <span data-v="cifar.delta.2.500" data-f="s4">-0.0031</span> (ns) / <span data-v="cifar.delta.2.1000" data-f="s4">+0.0181</span> / <span data-v="cifar.delta.2.2000" data-f="s4">+0.0249</span> / <span data-v="cifar.delta.2.5000" data-f="s4">+0.0258</span> / <span data-v="cifar.delta.2.10000" data-f="s4">+0.0247</span>; K=4 <span data-v="cifar.delta.4.500" data-f="s4">-0.0634</span> / <span data-v="cifar.delta.4.1000" data-f="s4">-0.0130</span> / <span data-v="cifar.delta.4.2000" data-f="s4">+0.0254</span> / <span data-v="cifar.delta.4.5000" data-f="s4">+0.0312</span> / <span data-v="cifar.delta.4.10000" data-f="s4">+0.0317</span> at N=500/1000/2000/5000/10000. <span data-v="cifar.exp3_sig_count" data-f="i">9</span>/<span data-v="cifar.exp3_comparisons" data-f="i">10</span> Holm-significant.</span>
+          <span>K=16, N=10,000: <span data-v="cifar.delta.16.10000" data-f="s4">+0.0491</span> (Exp 3b). Partition arms measured only at K=16, N=10,000 (Exp 3d, 3e).</span>
+          <span>Protocol: <span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni · paired t-tests govern ordering claims (Welch reported) · pre-registered.</span>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="widget widget--w3" aria-labelledby="w3-title">
+  <div class="widget__wrap">
+    <div class="widget__side">
+      <div class="widget__label">WIDGET 3 · K × N SCALING</div>
+      <h3 id="w3-title">When do sub-units win, and how many should there be?</h3>
+      <p class="widget__note">x-axes show the measured N grid, evenly spaced (not to scale). Every dot is a recorded grid point.</p>
+    </div>
+    <div class="widget__main">
+
+      <figure class="chart">
+        <div class="chart__title"><span class="only-desk">A · MNIST: Model III K=2, delta vs matched MLP</span><span class="only-mob">A · MNIST: K=2, delta vs matched MLP</span></div>
+        <svg class="only-desk" viewBox="0 0 960 340" role="img" aria-label="MNIST K=2 delta vs MLP by N: 300 -0.131, 1000 +0.0035, 2000 +0.0102 peak, 5000 +0.0073, 10000 +0.0034." data-x0="140" data-dx="170" data-y0="63.75" data-ppu="1687.5">
+          <path class="f-none s-rule" stroke-width="1" d="M80 30H900M80 131.25H900M80 198.75H900M80 266.25H900"/>
+          <path class="f-none s-ink" stroke-width="1.2" d="M80 63.75H900"/>
+          <text class="ax t-end" x="70" y="34">+0.02</text>
+          <text class="ax f-ink t-end" x="70" y="68">0</text>
+          <text class="ax t-end" x="70" y="135">-0.04</text>
+          <text class="ax t-end" x="70" y="203">-0.08</text>
+          <text class="ax t-end" x="70" y="270">-0.12</text>
+          <text class="ax t-mid" x="140" y="328">300</text>
+          <text class="ax t-mid" x="310" y="328">1000</text>
+          <text class="ax t-mid" x="480" y="328">2000</text>
+          <text class="ax t-mid" x="650" y="328">5000</text>
+          <text class="ax t-mid" x="820" y="328">10000</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="mnist.delta_k2" data-ns="mnist.n" points="140,285.3 310,57.9 480,46.5 650,51.4 820,58"/>
+          <path class="f-fail" d="M-8 -4.3L8 -4.3L0 8.7Z" data-pt="mnist.delta_k2.300" data-i="0" transform="translate(140,285.3)"/>
+          <circle class="f-accent" r="5" data-pt="mnist.delta_k2.1000" data-i="1" cx="310" cy="57.9"/>
+          <circle class="f-accent s-ink" stroke-width="1.5" r="6" data-pt="mnist.delta_k2.2000" data-i="2" cx="480" cy="46.5"/>
+          <circle class="f-accent" r="5" data-pt="mnist.delta_k2.5000" data-i="3" cx="650" cy="51.4"/>
+          <circle class="f-accent" r="5" data-pt="mnist.delta_k2.10000" data-i="4" cx="820" cy="58"/>
+          <text class="t-mono t-fail t-b" font-size="13" x="156" y="282">▼ <tspan data-v="mnist.delta_k2.300" data-f="s3">-0.131</tspan> at N=300</text>
+          <text class="t-body t-fail" font-size="13" x="156" y="300">The founding hypothesis predicted the opposite. It failed here.</text>
+          <text class="t-mono t-accent t-mid" font-size="12" x="480" y="24"><tspan data-v="mnist.delta_k2.2000" data-f="s4">+0.0102</tspan> peak at N=2000</text>
+          <text class="t-body t-ink2 t-end" font-size="12" x="900" y="96">~<tspan data-v="mnist.mlp_top" data-f="f2">0.96</tspan> ceiling (MLP tops at <tspan data-v="mnist.mlp_top" data-f="f4">0.9578</tspan>): association, not a mechanism</text>
+        </svg>
+        <svg class="only-mob" viewBox="0 0 328 200" role="img" aria-label="MNIST K=2 delta vs MLP by N: 300 -0.131, 1000 +0.0035, 2000 +0.0102 peak, 5000 +0.0073, 10000 +0.0034." data-x0="60" data-dx="62" data-y0="30" data-ppu="1000">
+          <path class="f-none s-rule" stroke-width="1" d="M40 110H320M40 170H320"/>
+          <path class="f-none s-ink" stroke-width="1" d="M40 30H320"/>
+          <text class="ax ax--s f-ink t-end" x="34" y="34">0</text>
+          <text class="ax ax--s t-end" x="34" y="114">-0.08</text>
+          <text class="ax ax--s t-end" x="34" y="174">-0.14</text>
+          <text class="ax ax--s t-mid" x="60" y="192">300</text>
+          <text class="ax ax--s t-mid" x="122" y="192">1k</text>
+          <text class="ax ax--s t-mid" x="184" y="192">2k</text>
+          <text class="ax ax--s t-mid" x="246" y="192">5k</text>
+          <text class="ax ax--s t-mid" x="308" y="192">10k</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="mnist.delta_k2" data-ns="mnist.n" points="60,161.3 122,26.5 184,19.8 246,22.7 308,26.6"/>
+          <path class="f-fail" d="M-6 -3.2L6 -3.2L0 6.5Z" data-pt="mnist.delta_k2.300" data-i="0" transform="translate(60,161.3)"/>
+          <circle class="f-accent" r="4" data-pt="mnist.delta_k2.1000" data-i="1" cx="122" cy="26.5"/>
+          <circle class="f-accent s-ink" stroke-width="1.5" r="5" data-pt="mnist.delta_k2.2000" data-i="2" cx="184" cy="19.8"/>
+          <circle class="f-accent" r="4" data-pt="mnist.delta_k2.5000" data-i="3" cx="246" cy="22.7"/>
+          <circle class="f-accent" r="4" data-pt="mnist.delta_k2.10000" data-i="4" cx="308" cy="26.6"/>
+          <text class="t-mono t-fail t-b" font-size="11" x="72" y="164">▼ <tspan data-v="mnist.delta_k2.300" data-f="s3">-0.131</tspan> (N=300)</text>
+          <text class="t-mono t-accent t-mid" font-size="10" x="184" y="12"><tspan data-v="mnist.delta_k2.2000" data-f="s4">+0.0102</tspan> peak</text>
+        </svg>
+        <table class="data-table stack">
+          <caption>Data table · Chart A</caption>
+          <thead><tr><th scope="col">N</th><th scope="col">300</th><th scope="col">1000</th><th scope="col">2000</th><th scope="col">5000</th><th scope="col">10000</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Δ vs MLP</th><td class="fail" data-label="N=300"><span>▼ <span data-v="mnist.delta_k2.300" data-f="s3">-0.131</span></span></td><td data-label="N=1000"><span data-v="mnist.delta_k2.1000" data-f="s4">+0.0035</span></td><td data-label="N=2000"><span data-v="mnist.delta_k2.2000" data-f="s4">+0.0102</span></td><td data-label="N=5000"><span data-v="mnist.delta_k2.5000" data-f="s4">+0.0073</span></td><td data-label="N=10000"><span data-v="mnist.delta_k2.10000" data-f="s4">+0.0034</span></td></tr>
+          </tbody>
+        </table>
+        <figcaption>Lines join measured points; no interpolation is claimed. · <span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni<span class="only-desk"> · Exp 1, <span data-v="mnist.trials" data-f="i">450</span>/<span data-v="mnist.trials" data-f="i">450</span> trials</span>.</figcaption>
+      </figure>
+
+      <figure class="chart chart-b">
+        <div class="chart__title">B · CIFAR-10 (no convolution): delta vs matched MLP</div>
+        <svg class="only-desk" viewBox="0 0 960 340" role="img" aria-label="CIFAR-10 deltas by N for K=2 (circles, solid) and K=4 (squares, dashed), plus K=16 at N=10000 (+0.0491, star)." data-x0="140" data-dx="170" data-y0="154.6" data-ppu="2077.5">
+          <path class="f-none s-rule" stroke-width="1" d="M80 30H900M80 71.5H900M80 113.1H900M80 196.2H900M80 237.7H900M80 279.2H900"/>
+          <path class="f-none s-ink" stroke-width="1.2" d="M80 154.6H900"/>
+          <text class="ax t-end" x="70" y="34">+0.06</text>
+          <text class="ax t-end" x="70" y="76">+0.04</text>
+          <text class="ax t-end" x="70" y="117">+0.02</text>
+          <text class="ax f-ink t-end" x="70" y="159">0</text>
+          <text class="ax t-end" x="70" y="200">-0.02</text>
+          <text class="ax t-end" x="70" y="242">-0.04</text>
+          <text class="ax t-end" x="70" y="283">-0.06</text>
+          <text class="ax t-mid" x="140" y="328">500</text>
+          <text class="ax t-mid" x="310" y="328">1000</text>
+          <text class="ax t-mid" x="480" y="328">2000</text>
+          <text class="ax t-mid" x="650" y="328">5000</text>
+          <text class="ax t-mid" x="820" y="328">10000</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="cifar.delta.2" data-ns="cifar.n" points="140,161.1 310,116.9 480,102.9 650,101 820,103.3"/>
+          <polyline class="f-none s-ink" stroke-width="1.5" stroke-dasharray="6 4" data-plot="cifar.delta.4" data-ns="cifar.n" points="140,286.3 310,181.5 480,101.8 650,89.9 820,88.8"/>
+          <circle class="f-paper s-fail" stroke-width="2" r="5" data-pt="cifar.delta.2.500" data-i="0" cx="140" cy="161.1"/>
+          <circle class="f-accent" r="5" data-pt="cifar.delta.2.1000" data-i="1" cx="310" cy="116.9"/>
+          <circle class="f-accent" r="5" data-pt="cifar.delta.2.2000" data-i="2" cx="480" cy="102.9"/>
+          <circle class="f-accent" r="5" data-pt="cifar.delta.2.5000" data-i="3" cx="650" cy="101"/>
+          <circle class="f-accent" r="5" data-pt="cifar.delta.2.10000" data-i="4" cx="820" cy="103.3"/>
+          <path class="f-fail" d="M-8 -4.3L8 -4.3L0 8.7Z" data-pt="cifar.delta.4.500" data-i="0" transform="translate(140,286.3)"/>
+          <rect class="f-ink" width="10" height="10" data-pt="cifar.delta.4.1000" data-i="1" x="305" y="176.5"/>
+          <rect class="f-ink" width="10" height="10" data-pt="cifar.delta.4.2000" data-i="2" x="475" y="96.8"/>
+          <rect class="f-ink" width="10" height="10" data-pt="cifar.delta.4.5000" data-i="3" x="645" y="84.9"/>
+          <rect class="f-ink" width="10" height="10" data-pt="cifar.delta.4.10000" data-i="4" x="815" y="83.8"/>
+          <path class="f-accent s-ink" stroke-width="1" d="M0 -10.9L3.3 -3.3L11.4 -2.9L5.1 2.3L7.2 10.1L0 5.7L-7.2 10.1L-5.1 2.3L-11.4 -2.9L-3.3 -3.3Z" data-pt="cifar.delta.16.10000" data-i="4" transform="translate(820,52.5)"/>
+          <text class="t-mono t-accent t-end t-b" font-size="12" x="808" y="38">★ K=16, N=10,000: <tspan data-v="cifar.delta.16.10000" data-f="s4">+0.0491</tspan> (largest on the K × N grid)</text>
+          <text class="t-mono t-fail t-b" font-size="12" x="156" y="290">▼ K=4 <tspan data-v="cifar.delta.4.500" data-f="s4">-0.0634</tspan> at N=500</text>
+          <text class="t-mono t-fail" font-size="12" x="156" y="178">K=2 <tspan data-v="cifar.delta.2.500" data-f="s4">-0.0031</tspan> (ns)</text>
+          <text class="t-mono" font-size="12" x="862" y="92">K=4</text>
+          <text class="t-mono t-accent" font-size="12" x="862" y="112">K=2</text>
+        </svg>
+        <svg class="only-mob" viewBox="0 0 328 200" role="img" aria-label="CIFAR-10 deltas by N for K=2 (circles, solid) and K=4 (squares, dashed), plus K=16 at N=10000 (+0.0491, star)." data-x0="60" data-dx="62" data-y0="93" data-ppu="1150">
+          <path class="f-none s-rule" stroke-width="1" d="M40 47H320M40 139H320"/>
+          <path class="f-none s-ink" stroke-width="1" d="M40 93H320"/>
+          <text class="ax ax--s t-end" x="34" y="51">+0.04</text>
+          <text class="ax ax--s f-ink t-end" x="34" y="97">0</text>
+          <text class="ax ax--s t-end" x="34" y="143">-0.04</text>
+          <text class="ax ax--s t-mid" x="60" y="192">500</text>
+          <text class="ax ax--s t-mid" x="122" y="192">1k</text>
+          <text class="ax ax--s t-mid" x="184" y="192">2k</text>
+          <text class="ax ax--s t-mid" x="246" y="192">5k</text>
+          <text class="ax ax--s t-mid" x="308" y="192">10k</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="cifar.delta.2" data-ns="cifar.n" points="60,96.6 122,72.2 184,64.4 246,63.3 308,64.6"/>
+          <polyline class="f-none s-ink" stroke-width="1.5" stroke-dasharray="5 3" data-plot="cifar.delta.4" data-ns="cifar.n" points="60,165.9 122,107.9 184,63.8 246,57.2 308,56.6"/>
+          <circle class="f-paper s-fail" stroke-width="2" r="4" data-pt="cifar.delta.2.500" data-i="0" cx="60" cy="96.6"/>
+          <circle class="f-accent" r="4" data-pt="cifar.delta.2.1000" data-i="1" cx="122" cy="72.2"/>
+          <circle class="f-accent" r="4" data-pt="cifar.delta.2.2000" data-i="2" cx="184" cy="64.4"/>
+          <circle class="f-accent" r="4" data-pt="cifar.delta.2.5000" data-i="3" cx="246" cy="63.3"/>
+          <circle class="f-accent" r="4" data-pt="cifar.delta.2.10000" data-i="4" cx="308" cy="64.6"/>
+          <path class="f-fail" d="M-6 -3.2L6 -3.2L0 6.5Z" data-pt="cifar.delta.4.500" data-i="0" transform="translate(60,165.9)"/>
+          <rect class="f-ink" width="8" height="8" data-pt="cifar.delta.4.1000" data-i="1" x="118" y="103.9"/>
+          <rect class="f-ink" width="8" height="8" data-pt="cifar.delta.4.2000" data-i="2" x="180" y="59.8"/>
+          <rect class="f-ink" width="8" height="8" data-pt="cifar.delta.4.5000" data-i="3" x="242" y="53.2"/>
+          <rect class="f-ink" width="8" height="8" data-pt="cifar.delta.4.10000" data-i="4" x="304" y="52.6"/>
+          <path class="f-accent s-ink" stroke-width="1" d="M0 -8.2L2.5 -2.5L8.6 -2.2L3.8 1.7L5.4 7.6L0 4.3L-5.4 7.6L-3.8 1.7L-8.6 -2.2L-2.5 -2.5Z" data-pt="cifar.delta.16.10000" data-i="4" transform="translate(308,36.5)"/>
+          <text class="t-mono t-accent t-end t-b" font-size="10" x="296" y="24">★ K=16 <tspan data-v="cifar.delta.16.10000" data-f="s4">+0.0491</tspan></text>
+          <text class="t-mono t-fail t-b" font-size="10" x="72" y="176">▼ K=4 <tspan data-v="cifar.delta.4.500" data-f="s4">-0.0634</tspan></text>
+        </svg>
+        <div class="legend">
+          <span class="legend__item"><span class="sw-circle"></span>K=2 · solid · circles</span>
+          <span class="legend__item"><span class="sw-square"></span>K=4 · dashed · squares</span>
+          <span class="legend__item">★ K=16 single recorded point</span>
+          <span class="legend__item fail">▼ / red ring = low-N negative</span>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card__title">Best K: <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> at N = 2000 / 5000 / 10000</div>
+            <div class="bestk">
+              <span class="bestk__n">500</span><span class="bestk__n">1000</span><span class="bestk__n">2000</span><span class="bestk__n">5000</span><span class="bestk__n">10000</span>
+              <span>K<span data-v="cifar.best_k.500" data-f="i">2</span></span><span>K<span data-v="cifar.best_k.1000" data-f="i">2</span></span><span>K<span data-v="cifar.best_k.2000" data-f="i">4</span></span><span>K<span data-v="cifar.best_k.5000" data-f="i">8</span></span><span class="bestk__top">★ K<span data-v="cifar.best_k.10000" data-f="i">16</span></span>
+            </div>
+            <p class="card__note">Best arm by N (Exp 3b). Group-size hypothesis falsified; both criteria fired: K16 &gt; K8 at N=10000 <span class="mono" data-v="cifar.tests.k16_vs_k8_10000.diff" data-f="s4">+0.0041</span>, p=<span class="mono" data-v="cifar.tests.k16_vs_k8_10000.p" data-f="e">5.1e-03</span>; K8 ≤ K4 at N=2000 <span class="mono" data-v="cifar.tests.k8_vs_k4_2000.diff" data-f="s4">-0.0369</span>, p=<span class="mono" data-v="cifar.tests.k8_vs_k4_2000.p" data-f="e">2.7e-19</span>.</p>
+          </div>
+          <div class="card">
+            <div class="card__title">Interior optimum at K=16</div>
+            <div class="mono">K32 ≤ K16: <span data-v="cifar.tests.k32_vs_k16_10000.diff" data-f="s4">-0.0236</span>, p=<span data-v="cifar.tests.k32_vs_k16_10000.p" data-f="e">2.2e-15</span> · K32 &gt; K64: <span data-v="cifar.tests.k32_vs_k64_10000.diff" data-f="s4">+0.0740</span></div>
+            <div class="flag"><b>K=32 at N=20,000: not measured</b>: saturation vs needs-more-data unresolved. (Flag, not a point.)</div>
+          </div>
+        </div>
+        <div class="dead-strip">
+          <div class="dead-strip__title">Dead-row fraction rises with K (secondary strip, CIFAR N=<span data-v="cifar.dead.n" data-f="n">2,000</span>, seed <span data-v="cifar.dead.seed" data-f="i">0</span>)</div>
+          <div class="dead-strip__grid">
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.2" data-lo="0" data-span="1" style="height:10.2%"></div></div><div>K=2 · <span data-v="cifar.dead.fraction.2" data-f="f4">0.1016</span></div></div>
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.4" data-lo="0" data-span="1" style="height:20.9%"></div></div><div>K=4 · <span data-v="cifar.dead.fraction.4" data-f="f4">0.2087</span></div></div>
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.8" data-lo="0" data-span="1" style="height:30.6%"></div></div><div>K=8 · <span data-v="cifar.dead.fraction.8" data-f="f4">0.3055</span></div></div>
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.16" data-lo="0" data-span="1" style="height:48.6%"></div></div><div>K=16 · <span data-v="cifar.dead.fraction.16" data-f="f4">0.4861</span></div></div>
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.32" data-lo="0" data-span="1" style="height:66.6%"></div></div><div>K=32 · <span data-v="cifar.dead.fraction.32" data-f="f4">0.6658</span></div></div>
+            <div><div class="dead-bar"><div class="dead-bar__fill" data-bar-h="cifar.dead.fraction.64" data-lo="0" data-span="1" style="height:80.9%"></div></div><div>K=64 · <span data-v="cifar.dead.fraction.64" data-f="f4">0.8093</span></div></div>
+          </div>
+        </div>
+        <table class="data-table stack">
+          <caption>Data table · Chart B (K=2, 4: Exp 3, <span data-v="cifar.exp3_sig_count" data-f="i">9</span>/<span data-v="cifar.exp3_comparisons" data-f="i">10</span> Holm-significant; K=8, 16: Exp 3b; K=32, 64: Exp 3c)</caption>
+          <thead><tr><th scope="col">K</th><th scope="col">500</th><th scope="col">1000</th><th scope="col">2000</th><th scope="col">5000</th><th scope="col">10000</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">K=2</th><td class="fail" data-label="N=500"><span><span data-v="cifar.delta.2.500" data-f="s4">-0.0031</span> (ns)</span></td><td data-label="N=1000"><span data-v="cifar.delta.2.1000" data-f="s4">+0.0181</span></td><td data-label="N=2000"><span data-v="cifar.delta.2.2000" data-f="s4">+0.0249</span></td><td data-label="N=5000"><span data-v="cifar.delta.2.5000" data-f="s4">+0.0258</span></td><td data-label="N=10000"><span data-v="cifar.delta.2.10000" data-f="s4">+0.0247</span></td></tr>
+            <tr><th scope="row">K=4</th><td class="fail" data-label="N=500"><span>▼ <span data-v="cifar.delta.4.500" data-f="s4">-0.0634</span></span></td><td class="fail" data-label="N=1000"><span data-v="cifar.delta.4.1000" data-f="s4">-0.0130</span></td><td data-label="N=2000"><span data-v="cifar.delta.4.2000" data-f="s4">+0.0254</span></td><td data-label="N=5000"><span data-v="cifar.delta.4.5000" data-f="s4">+0.0312</span></td><td data-label="N=10000"><span data-v="cifar.delta.4.10000" data-f="s4">+0.0317</span></td></tr>
+            <tr><th scope="row">K=8</th><td class="fail" data-label="N=500"><span data-v="cifar.delta.8.500" data-f="s4">-0.1195</span></td><td class="fail" data-label="N=1000"><span data-v="cifar.delta.8.1000" data-f="s4">-0.0781</span></td><td class="fail" data-label="N=2000"><span data-v="cifar.delta.8.2000" data-f="s4">-0.0115</span></td><td data-label="N=5000"><span data-v="cifar.delta.8.5000" data-f="s4">+0.0407</span></td><td data-label="N=10000"><span data-v="cifar.delta.8.10000" data-f="s4">+0.0450</span></td></tr>
+            <tr><th scope="row">K=16</th><td class="fail" data-label="N=500"><span data-v="cifar.delta.16.500" data-f="s4">-0.1510</span></td><td class="fail" data-label="N=1000"><span data-v="cifar.delta.16.1000" data-f="s4">-0.1435</span></td><td class="fail" data-label="N=2000"><span data-v="cifar.delta.16.2000" data-f="s4">-0.0986</span></td><td data-label="N=5000"><span data-v="cifar.delta.16.5000" data-f="s4">+0.0259</span></td><td class="accent-ink b" data-label="N=10000"><span><span data-v="cifar.delta.16.10000" data-f="s4">+0.0491</span> ★</span></td></tr>
+            <tr><th scope="row">K=32</th><td class="ink2" data-label="N=500">n/a</td><td class="ink2" data-label="N=1000">n/a</td><td class="ink2" data-label="N=2000">n/a</td><td class="fail" data-label="N=5000"><span data-v="cifar.delta.32.5000" data-f="s4">-0.0568</span></td><td data-label="N=10000"><span data-v="cifar.delta.32.10000" data-f="s4">+0.0255</span></td></tr>
+            <tr><th scope="row">K=64</th><td class="ink2" data-label="N=500">n/a</td><td class="ink2" data-label="N=1000">n/a</td><td class="ink2" data-label="N=2000">n/a</td><td class="fail" data-label="N=5000"><span data-v="cifar.delta.64.5000" data-f="s4">-0.1551</span></td><td class="fail" data-label="N=10000"><span data-v="cifar.delta.64.10000" data-f="s4">-0.0485</span></td></tr>
+          </tbody>
+        </table>
+        <figcaption>Lines join measured points; no interpolation is claimed. · <span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni · "n/a" = not run. Crossover N (first N where arm is ahead): K2 ≈ 500-1000; K4 ≈ 1000-2000; K8/K16 ≈ 2000-5000; K32 ≈ 5000-10000; K64: not yet at N=10000… roughly dataset-invariant; no mechanistic account. Extra parameters: K=2 <span data-v="cifar.extra_params.2.pct" data-f="sp3">+0.045%</span>; K=16 <span data-v="cifar.extra_params.16.pct" data-f="sp3">+0.675%</span>; K=64 <span data-v="cifar.extra_params.64.pct" data-f="sp3">+2.834%</span>.</figcaption>
+      </figure>
+
+      <figure class="chart chart-c" id="chartc">
+        <div class="chart__title">C · Temporal / data efficiency: interaction I(early), Exps 4 + 4b</div>
+        <p class="chart__sub">Partitioning buys data efficiency, not asymptotic capability.</p>
+        <svg class="only-desk" viewBox="0 0 960 340" role="img" aria-label="I(early) inverted-U over six recorded N values: -0.017 at N=500, 0.000 at 2000, +0.026 at 4000, +0.065 peak at N=8000, +0.048 at N=16000, +0.026 at N=32000." data-x0="140" data-dx="136" data-y0="226.4" data-ppu="2455">
+          <path class="f-none s-rule" stroke-width="1" d="M80 30H900M80 79.1H900M80 128.2H900M80 177.3H900M80 275.5H900"/>
+          <path class="f-none s-ink" stroke-width="1.2" d="M80 226.4H900"/>
+          <text class="ax t-end" x="70" y="34">+0.08</text>
+          <text class="ax t-end" x="70" y="83">+0.06</text>
+          <text class="ax t-end" x="70" y="132">+0.04</text>
+          <text class="ax t-end" x="70" y="181">+0.02</text>
+          <text class="ax f-ink t-end" x="70" y="230">0</text>
+          <text class="ax t-end" x="70" y="279">-0.02</text>
+          <text class="ax t-mid" x="140" y="318">500</text>
+          <text class="ax t-mid" x="276" y="318">2000</text>
+          <text class="ax t-mid" x="412" y="318">4000</text>
+          <text class="ax t-mid" x="548" y="318">8000</text>
+          <text class="ax t-mid" x="684" y="318">16000</text>
+          <text class="ax t-mid" x="820" y="318">32000</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="0" data-i1="3" points="140,267.4 276,226.4 412,162.7 548,68"/>
+          <polyline class="f-none s-accent" stroke-width="1.5" stroke-dasharray="2 4" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="3" data-i1="4" points="548,68 684,107.7"/>
+          <polyline class="f-none s-accent" stroke-width="2.5" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="4" data-i1="5" points="684,107.7 820,162.4"/>
+          <circle class="f-paper s-accent" stroke-width="2" r="5" data-pt="temporal.i_early.500" data-i="0" cx="140" cy="267.4"/>
+          <circle class="f-accent" r="5" data-pt="temporal.i_early.2000" data-i="1" cx="276" cy="226.4"/>
+          <circle class="f-accent" r="5" data-pt="temporal.i_early.4000" data-i="2" cx="412" cy="162.7"/>
+          <circle class="f-accent s-ink" stroke-width="1.5" r="7" data-pt="temporal.i_early.8000" data-i="3" cx="548" cy="68"/>
+          <circle class="f-accent" r="5" data-pt="temporal.i_early.16000" data-i="4" cx="684" cy="107.7"/>
+          <circle class="f-accent" r="5" data-pt="temporal.i_early.32000" data-i="5" cx="820" cy="162.4"/>
+          <text class="t-mono t-ink2" font-size="12" data-pt="temporal.i_early.500" data-i="0" data-ox="12" data-oy="-4" data-v="temporal.i_early.500" data-f="s3" x="152" y="263.4">-0.017</text>
+          <text class="t-mono t-ink2" font-size="12" data-pt="temporal.i_early.2000" data-i="1" data-ox="12" data-oy="-4" data-v="temporal.i_early.2000" data-f="s3" x="288" y="222.4">0.000</text>
+          <text class="t-mono t-ink2" font-size="12" data-pt="temporal.i_early.4000" data-i="2" data-ox="12" data-oy="-4" data-v="temporal.i_early.4000" data-f="s3" x="424" y="158.7">+0.026</text>
+          <text class="t-mono t-ink2" font-size="12" data-pt="temporal.i_early.16000" data-i="4" data-ox="12" data-oy="-4" data-v="temporal.i_early.16000" data-f="s3" x="696" y="103.7">+0.048</text>
+          <text class="t-mono t-ink2" font-size="12" data-pt="temporal.i_early.32000" data-i="5" data-ox="12" data-oy="-4" data-v="temporal.i_early.32000" data-f="s3" x="832" y="158.4">+0.026</text>
+          <text class="t-mono t-accent t-mid t-b" font-size="12" data-pt="temporal.i_early.8000" data-i="3" data-oy="-16" x="548" y="52">Peak at N=8000 (<tspan data-v="temporal.i_early.8000" data-f="s3">+0.065</tspan>)</text>
+          <text class="t-body t-mid" font-size="12" x="616" y="138">error-closed rises <tspan data-v="temporal.error_closed.8000.mean" data-f="f3">0.398</tspan> → <tspan data-v="temporal.error_closed.16000.mean" data-f="f3">0.435</tspan></text>
+          <text class="t-body t-ink2 t-mid" font-size="11" x="616" y="153">(raw I squeezed by the ceiling; CIs overlap)</text>
+          <text class="t-body t-mid" font-size="12" x="752" y="196">genuine turnover</text>
+          <text class="t-body t-ink2 t-mid" font-size="11" x="752" y="211">(error-closed <tspan data-v="temporal.error_closed.16000.mean" data-f="f3">0.435</tspan> → <tspan data-v="temporal.error_closed.32000.mean" data-f="f3">0.246</tspan>, disjoint CIs)</text>
+        </svg>
+        <svg class="only-mob" viewBox="0 0 328 200" role="img" aria-label="I(early) inverted-U over six recorded N values: -0.017 at N=500, 0.000 at 2000, +0.026 at 4000, +0.065 peak at N=8000, +0.048 at N=16000, +0.026 at N=32000." data-x0="50" data-dx="52" data-y0="144" data-ppu="1500">
+          <path class="f-none s-rule" stroke-width="1" d="M40 54H320M40 84H320M40 114H320M40 174H320"/>
+          <path class="f-none s-ink" stroke-width="1" d="M40 144H320"/>
+          <text class="ax ax--s t-end" x="34" y="58">+0.06</text>
+          <text class="ax ax--s f-ink t-end" x="34" y="148">0</text>
+          <text class="ax ax--s t-end" x="34" y="178">-0.02</text>
+          <text class="ax ax--s t-mid" x="50" y="192">500</text>
+          <text class="ax ax--s t-mid" x="102" y="192">2k</text>
+          <text class="ax ax--s t-mid" x="154" y="192">4k</text>
+          <text class="ax ax--s t-mid" x="206" y="192">8k</text>
+          <text class="ax ax--s t-mid" x="258" y="192">16k</text>
+          <text class="ax ax--s t-mid" x="310" y="192">32k</text>
+          <polyline class="f-none s-accent" stroke-width="1.5" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="0" data-i1="3" points="50,169.1 102,144 154,105 206,47.2"/>
+          <polyline class="f-none s-accent" stroke-width="1.5" stroke-dasharray="2 3" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="3" data-i1="4" points="206,47.2 258,71.4"/>
+          <polyline class="f-none s-accent" stroke-width="2.5" data-plot="temporal.i_early" data-ns="temporal.n" data-i0="4" data-i1="5" points="258,71.4 310,104.9"/>
+          <circle class="f-paper s-accent" stroke-width="2" r="4" data-pt="temporal.i_early.500" data-i="0" cx="50" cy="169.1"/>
+          <circle class="f-accent" r="4" data-pt="temporal.i_early.2000" data-i="1" cx="102" cy="144"/>
+          <circle class="f-accent" r="4" data-pt="temporal.i_early.4000" data-i="2" cx="154" cy="105"/>
+          <circle class="f-accent s-ink" stroke-width="1.5" r="5" data-pt="temporal.i_early.8000" data-i="3" cx="206" cy="47.2"/>
+          <circle class="f-accent" r="4" data-pt="temporal.i_early.16000" data-i="4" cx="258" cy="71.4"/>
+          <circle class="f-accent" r="4" data-pt="temporal.i_early.32000" data-i="5" cx="310" cy="104.9"/>
+          <text class="t-mono t-accent t-mid t-b" font-size="10" data-pt="temporal.i_early.8000" data-i="3" data-oy="-12" x="206" y="35.2">Peak N=8000 (<tspan data-v="temporal.i_early.8000" data-f="s3">+0.065</tspan>)</text>
+        </svg>
+        <div class="trade"><b>Trade, adjacent by rule:</b> persistence costs count accuracy, growing with N (T-N, same N order: <span class="mono" data-v="temporal.t_minus_n_count.500" data-f="s3">+0.048</span> / <span class="mono" data-v="temporal.t_minus_n_count.2000" data-f="s3">-0.017</span> / <span class="mono" data-v="temporal.t_minus_n_count.4000" data-f="s3">-0.025</span> / <span class="mono" data-v="temporal.t_minus_n_count.8000" data-f="s3">-0.022</span> / <span class="mono" data-v="temporal.t_minus_n_count.16000" data-f="s3">-0.038</span> / <span class="mono" data-v="temporal.t_minus_n_count.32000" data-f="s3">-0.053</span>). The unified model is a trade, not a strict improvement.</div>
+        <table class="data-table stack">
+          <caption>Data table · Chart C</caption>
+          <thead><tr><th scope="col">N</th><th scope="col">500</th><th scope="col">2000</th><th scope="col">4000</th><th scope="col">8000</th><th scope="col">16000</th><th scope="col">32000</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">I(early)</th><td data-label="N=500"><span data-v="temporal.i_early.500" data-f="s3">-0.017</span></td><td data-label="N=2000"><span data-v="temporal.i_early.2000" data-f="s3">0.000</span></td><td data-label="N=4000"><span data-v="temporal.i_early.4000" data-f="s3">+0.026</span></td><td data-label="N=8000"><span data-v="temporal.i_early.8000" data-f="s3">+0.065</span></td><td data-label="N=16000"><span data-v="temporal.i_early.16000" data-f="s3">+0.048</span></td><td data-label="N=32000"><span data-v="temporal.i_early.32000" data-f="s3">+0.026</span></td></tr>
+            <tr><th scope="row">T-N count</th><td data-label="N=500"><span data-v="temporal.t_minus_n_count.500" data-f="s3">+0.048</span></td><td data-label="N=2000"><span data-v="temporal.t_minus_n_count.2000" data-f="s3">-0.017</span></td><td data-label="N=4000"><span data-v="temporal.t_minus_n_count.4000" data-f="s3">-0.025</span></td><td data-label="N=8000"><span data-v="temporal.t_minus_n_count.8000" data-f="s3">-0.022</span></td><td data-label="N=16000"><span data-v="temporal.t_minus_n_count.16000" data-f="s3">-0.038</span></td><td data-label="N=32000"><span data-v="temporal.t_minus_n_count.32000" data-f="s3">-0.053</span></td></tr>
+          </tbody>
+        </table>
+        <figcaption>Lines join measured points; no interpolation is claimed. Dotted segment = 8000→16000 (CIs overlap); heavy segment = 16000→32000 (disjoint CIs). Synthetic task, all results at β=<span data-v="temporal.beta" data-f="f2">0.95</span>. Interaction Holm-significant at every N ≥ 4000.</figcaption>
+      </figure>
+
+      <p class="verdict"><b>Verdict.</b> The advantage appears at moderate-to-large N, and the optimal K doubles as N roughly doubles. Partitioning buys data efficiency, not asymptotic capability.</p>
+      <details class="exact">
+        <summary>Exact numbers &amp; protocol</summary>
+        <div class="exact__body">
+          <span>CIFAR effects are 2.5-16× larger than MNIST at matched N. Baselines deliberately handicapped (no convolution, flattened inputs); claims are relative within that controlled class only.</span>
+          <span>Exp 4 (synthetic 2×2, K∈{1,4} × β∈{0,<span data-v="temporal.beta" data-f="f2">0.95</span>}): I(early) <span data-v="temporal.i_early.500" data-f="s4">-0.0167</span> / <span data-v="temporal.i_early.2000" data-f="s4">0.0000</span> / <span data-v="temporal.i_early.8000" data-f="s4">+0.0645</span> and I(count) <span data-v="temporal.i_count.500" data-f="s4">+0.0908</span> / <span data-v="temporal.i_count.2000" data-f="s4">+0.0372</span> / <span data-v="temporal.i_count.8000" data-f="s4">-0.0564</span> at N=500/2000/8000; <span data-v="temporal.exp4_sig_count" data-f="i">5</span>/<span data-v="temporal.exp4_comparisons" data-f="i">6</span> Holm-significant; <span data-v="temporal.exp4_trials" data-f="i">540</span> trials, <span data-v="temporal.exp4_hit_cap" data-f="i">0</span>/<span data-v="temporal.exp4_trials" data-f="i">540</span> hit epoch cap.</span>
+          <span>Exp 4b: 8000→16000 error-closed <span data-v="temporal.error_closed.8000.mean" data-f="f3">0.398</span>→<span data-v="temporal.error_closed.16000.mean" data-f="f3">0.435</span>, CIs overlap; 16000→32000 <span data-v="temporal.error_closed.16000.mean" data-f="f3">0.435</span>→<span data-v="temporal.error_closed.32000.mean" data-f="f3">0.246</span>, disjoint CIs; temporal arm catches up (+0.044 vs Unified +0.012).</span>
+          <span>Do not average deltas across experiments (different ceilings: MNIST ~<span data-v="mnist.mlp_top" data-f="f2">0.96</span> vs no-convolution CIFAR <span data-v="cifar.mlp_top" data-f="f2">0.43</span>).</span>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="widget widget--w4" id="why" aria-labelledby="w4-title">
+  <div class="widget__wrap">
+    <div class="widget__side">
+      <div class="widget__label">WIDGET 4 · WHY IT WORKS (PARTLY)</div>
+      <h3 id="w4-title">How much of the win is actually the spatial story?</h3>
+    </div>
+    <div class="widget__main">
+      <div class="w4">
+        <figure>
+          <div class="w4__title">Ladder · CIFAR-10, K=16, N=10,000 (mean accuracy)</div>
+          <div class="ladder">
+            <div>
+              <div class="ladder__line"><span>MLP</span><span data-v="partition.acc.MLP" data-f="f4">0.4315</span></div>
+              <div class="ladder__track"><div class="ladder__fill fill-base" data-bar="partition.acc.MLP" data-lo="0.42" data-span="0.08" style="width:14.4%"></div></div>
+            </div>
+            <div>
+              <div class="ladder__line"><span>SCRAMBLED</span><span data-v="partition.acc.SCRAMBLED" data-f="f4">0.4718</span></div>
+              <div class="ladder__track"><div class="ladder__fill fill-hatch" data-bar="partition.acc.SCRAMBLED" data-lo="0.42" data-span="0.08" style="width:64.7%"></div></div>
+              <div class="ladder__sub"><span data-v="partition.tests.scrambled_vs_mlp.diff" data-f="s4">+0.0403</span> above MLP (p=<span data-v="partition.tests.scrambled_vs_mlp.p" data-f="e">8.2e-26</span>): destroying spatial structure entirely still beats the MLP</div>
+            </div>
+            <div>
+              <div class="ladder__line"><span>DEFAULT (contiguous slices)</span><span data-v="partition.acc.DEFAULT" data-f="f4">0.4807</span></div>
+              <div class="ladder__track"><div class="ladder__fill fill-accent60" data-bar="partition.acc.DEFAULT" data-lo="0.42" data-span="0.08" style="width:75.8%"></div></div>
+              <div class="ladder__sub">DEFAULT &gt; SCRAMBLED <span data-v="partition.tests.default_vs_scrambled.diff" data-f="s4">+0.0089</span> (p=<span data-v="partition.tests.default_vs_scrambled.p" data-f="e">3.4e-07</span>)</div>
+            </div>
+            <div>
+              <div class="ladder__line"><span>BANDED (2-row full-width bands)</span><span data-v="partition.acc.BANDED" data-f="f4">0.4855</span></div>
+              <div class="ladder__track"><div class="ladder__fill fill-accent80" data-bar="partition.acc.BANDED" data-lo="0.42" data-span="0.08" style="width:81.8%"></div></div>
+              <div class="ladder__sub">BANDED &gt; DEFAULT <span data-v="partition.tests.banded_vs_default.diff" data-f="s4">+0.0048</span> (p=<span data-v="partition.tests.banded_vs_default.p" data-f="e">3.1e-03</span>) (confounded with vertical extent) · PATCHED &gt; BANDED <span data-v="partition.tests.patched_vs_banded.diff" data-f="s4">+0.0074</span> (p=<span data-v="partition.tests.patched_vs_banded.p" data-f="e">6.2e-08</span>)</div>
+            </div>
+            <div>
+              <div class="ladder__line accent-ink b"><span>PATCHED (8×8 spatial blocks)</span><span data-v="partition.acc.PATCHED" data-f="f4">0.4929</span></div>
+              <div class="ladder__track"><div class="ladder__fill fill-accent" data-bar="partition.acc.PATCHED" data-lo="0.42" data-span="0.08" style="width:91.1%"></div></div>
+              <div class="ladder__sub">PATCHED &gt; DEFAULT <span data-v="partition.tests.patched_vs_default.diff" data-f="s4">+0.0122</span> (p=<span data-v="partition.tests.patched_vs_default.p" data-f="e">7.4e-10</span>) · PATCHED &gt; BANDED is the only fully controlled comparison</div>
+            </div>
+          </div>
+          <figcaption>Bars start at 0.42, not 0: differences are magnified for legibility. Steps are strictly monotone. <span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni.</figcaption>
+        </figure>
+        <figure>
+          <div class="w4__title">Decomposition of PATCHED's <span data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span> vs MLP</div>
+          <div class="decomp__sub">Exp 3e accounting · base <span data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span></div>
+          <div class="stack-bar" role="img" aria-label="Stacked bar: non-spatial residual 65.6%, accidental arrangement 14.5% not cleanly attributable, colour/vertical 7.8% confounded, spatial compactness 12.1% clean claim.">
+            <div class="seg-base" data-bar="partition.share.non_spatial" data-lo="0" data-span="100" style="width:65.6%"></div>
+            <div class="seg-hatch" data-bar="partition.share.accidental" data-lo="0" data-span="100" style="width:14.5%"></div>
+            <div class="seg-hatch2" data-bar="partition.share.colour_vertical" data-lo="0" data-span="100" style="width:7.8%"></div>
+            <div class="seg-accent" data-bar="partition.share.compactness" data-lo="0" data-span="100" style="width:12.1%"></div>
+          </div>
+          <table class="decomp-table">
+            <tbody>
+              <tr><th scope="row"><span class="swatch seg-base"></span><b>Non-spatial residual</b></th><td data-v="partition.share.non_spatial" data-f="p1">65.6%</td></tr>
+              <tr><th scope="row"><span class="swatch seg-hatch"></span>Accidental arrangement (not cleanly attributable)</th><td data-v="partition.share.accidental" data-f="p1">14.5%</td></tr>
+              <tr><th scope="row"><span class="swatch seg-hatch2"></span>Colour/vertical (confounded)</th><td data-v="partition.share.colour_vertical" data-f="p1">7.8%</td></tr>
+              <tr class="accent-ink"><th scope="row"><span class="swatch seg-accent"></span><b>Spatial compactness: all the directional framing can cleanly claim</b></th><td class="b" data-v="partition.share.compactness" data-f="p1">12.1%</td></tr>
+            </tbody>
+          </table>
+          <figcaption>Exp 3d two-way split of the same <span data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span>: <span data-v="partition.share.non_spatial" data-f="p1">65.6%</span> survives scrambling; <span data-v="partition.share.spatial_total" data-f="p1">34.4%</span> spatial; shown only alongside the four-way accounting above.</figcaption>
+        </figure>
+      </div>
+      <p class="verdict"><b>Verdict.</b> Boreal measured how much of its own headline its favourite explanation may claim: <span data-v="partition.share.compactness" data-f="p1">12.1%</span>. Most of the rest, the <span data-v="partition.share.non_spatial" data-f="p1">65.6%</span> non-spatial residual, is mechanism-unknown… the parameter-matched maxout control that would name it has not been run.</p>
+      <details class="exact">
+        <summary>Exact numbers &amp; protocol</summary>
+        <div class="exact__body">
+          <span>Exp 3d (K=16, CIFAR N=10000): MLP <span data-v="partition.acc.MLP" data-f="f4">0.4315</span> · SCRAMBLED <span data-v="partition.acc.SCRAMBLED" data-f="f4">0.4718</span> · DEFAULT <span data-v="partition.acc.DEFAULT" data-f="f4">0.4807</span> · PATCHED <span data-v="partition.acc.PATCHED" data-f="f4">0.4929</span>. PATCHED &gt; DEFAULT <span data-v="partition.tests.patched_vs_default.diff" data-f="s4">+0.0122</span> (p=<span data-v="partition.tests.patched_vs_default.p" data-f="e">7.4e-10</span>); DEFAULT &gt; SCRAMBLED <span data-v="partition.tests.default_vs_scrambled.diff" data-f="s4">+0.0089</span> (p=<span data-v="partition.tests.default_vs_scrambled.p" data-f="e">3.4e-07</span>); SCRAMBLED <span data-v="partition.tests.scrambled_vs_mlp.diff" data-f="s4">+0.0403</span> above MLP (p=<span data-v="partition.tests.scrambled_vs_mlp.p" data-f="e">8.2e-26</span>).</span>
+          <span>Exp 3e (BANDED arm, blind, pre-registered): BANDED <span data-v="partition.acc.BANDED" data-f="f4">0.4855</span>; PATCHED &gt; BANDED <span data-v="partition.tests.patched_vs_banded.diff" data-f="s4">+0.0074</span> (p=<span data-v="partition.tests.patched_vs_banded.p" data-f="e">6.2e-08</span>); BANDED &gt; DEFAULT <span data-v="partition.tests.banded_vs_default.diff" data-f="s4">+0.0048</span> (p=<span data-v="partition.tests.banded_vs_default.p" data-f="e">3.1e-03</span>, confounded with vertical extent).</span>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="widget" aria-labelledby="w2-title">
+  <div class="widget__wrap">
+    <div class="widget__side">
+      <div class="widget__label">WIDGET 2 · HARD MAX VS POOLING</div>
+      <h3 id="w2-title">Dead gradients look like a bug. Was fixing them a mistake?</h3>
+    </div>
+    <div class="widget__main">
+      <div class="w2">
+        <figure class="w2__fig">
+          <div class="w2__grids">
+            <div>
+              <div class="census census--dead" id="w2-dead" role="img" aria-label="Census grid: 52 of 384 rows dead under hard max. Cell positions are illustrative."></div>
+              <div class="census__label"><span data-v="exp2.dead_rows.dead" data-f="i">52</span>/<span data-v="exp2.dead_rows.total" data-f="i">384</span> dead rows under hard max</div>
+              <div class="census__sub">(never selected, no gradient)</div>
+            </div>
+            <div>
+              <div class="census census--soft" id="w2-soft" role="img" aria-label="Census grid: 0 of 384 rows dead under soft aggregations."></div>
+              <div class="census__label">0/<span data-v="exp2.dead_rows.total" data-f="i">384</span> under soft aggregations</div>
+            </div>
+          </div>
+          <figcaption>Census visualisation of recorded counts; cell positions are illustrative. Second hidden layer: <span data-v="exp2.dead_rows.layers.1.dead" data-f="i">51</span>/<span data-v="exp2.dead_rows.layers.1.total" data-f="i">128</span> (≈40%) dead under max; first: <span data-v="exp2.dead_rows.layers.0.dead" data-f="i">1</span>/<span data-v="exp2.dead_rows.layers.0.total" data-f="i">256</span>. Caveat: the dead-row census rests on limited (N, seed) coverage; a full census across N is unrun.</figcaption>
+        </figure>
+        <div class="w2__table">
+          <table class="data-table stack">
+            <caption>Delta vs hard max (Exp 2)</caption>
+            <thead><tr><th scope="col">Aggregation</th><th scope="col">N=300</th><th scope="col">N=1000</th><th scope="col">N=2000</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">softmax (τ=0.5)</th><td class="fail" data-label="N=300"><span data-v="exp2.delta_vs_max.softmax.300" data-f="s3">-0.163</span></td><td class="fail" data-label="N=1000"><span data-v="exp2.delta_vs_max.softmax.1000" data-f="s3">-0.055</span></td><td class="fail" data-label="N=2000"><span data-v="exp2.delta_vs_max.softmax.2000" data-f="s3">-0.012</span></td></tr>
+              <tr><th scope="row">logsumexp (τ=0.5)</th><td class="fail" data-label="N=300"><span data-v="exp2.delta_vs_max.logsumexp.300" data-f="s3">-0.192</span></td><td class="fail" data-label="N=1000"><span data-v="exp2.delta_vs_max.logsumexp.1000" data-f="s3">-0.095</span></td><td class="fail" data-label="N=2000"><span data-v="exp2.delta_vs_max.logsumexp.2000" data-f="s3">-0.031</span></td></tr>
+            </tbody>
+          </table>
+          <p class="w2__count"><span data-v="exp2.worse_count" data-f="i">6</span>/<span data-v="exp2.comparisons" data-f="i">6</span> Holm-significant · <span data-v="exp2.better_count" data-f="i">0</span>/<span data-v="exp2.comparisons" data-f="i">6</span> better than hard max</p>
+        </div>
+      </div>
+      <p class="verdict"><b>Verdict.</b> Dead rows are real (<span data-v="exp2.dead_rows.dead" data-f="i">52</span>/<span data-v="exp2.dead_rows.total" data-f="i">384</span>). Removing them still hurt, at every N. Hard-max selectivity is load-bearing; the dead-gradient hypothesis was not supported.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--failed" id="failed" aria-labelledby="failed-title">
+  <div class="eyebrow">03 · ▼</div>
+  <h2 id="failed-title">What failed, in full</h2>
+  <p class="failed__intro">These are features of the record, not footnotes. Each item below was pre-registered or logged before its outcome was known.</p>
+  <div class="failed__scroll">
+    <table class="failed-table stack">
+      <colgroup><col class="c1"><col><col class="c3"></colgroup>
+      <thead><tr><th scope="col">What was predicted</th><th scope="col">What happened</th><th scope="col">Recorded in</th></tr></thead>
+      <tbody>
+        <tr><td data-rec="Exp 1, Exp 3">Founding hypothesis: a Model III network wins at low data (N ≤ 300)</td><td class="fail">▼ Reversed: <span class="mono" data-v="mnist.delta_k2.300" data-f="s3">-0.131</span> MNIST N=300; K=4 <span class="mono" data-v="cifar.delta.4.500" data-f="s4">-0.0634</span> CIFAR N=500.</td><td>Exp 1, Exp 3</td></tr>
+        <tr><td data-rec="Exp 2">Dead-gradient fix: soft aggregation helps</td><td class="fail">▼ Soft aggregation worse at every N. Hard max is load-bearing.</td><td>Exp 2</td></tr>
+        <tr><td data-rec="Exp 3b">Group-size hypothesis</td><td class="fail">▼ Falsified by its own criteria (both fired).</td><td>Exp 3b</td></tr>
+        <tr><td data-rec="Latching tests">Latching a discrete fact</td><td class="fail">▼ Architecture integrates but cannot latch a discrete fact: order_bit at chance (≤0.55) across ten configurations (β to 0.99, soft reset, sparser spiking, shorter T, fewer events). No lateral recurrence.</td><td>Latching tests</td></tr>
+        <tr><td data-rec="Exp 4">Inverse effectiveness via N proxy</td><td class="fail">▼ Falsified (faithful cue-amplitude test unrun).</td><td>Exp 4</td></tr>
+        <tr><td data-rec="Exp 4b">Monotone synergy with N</td><td class="fail">▼ Falsified by Exp 4b's inverted-U.</td><td>Exp 4b</td></tr>
+        <tr><td data-rec="Lab notebook">Predictions</td><td class="fail">▼ Five logged predictions falsified; each kept as a falsification, not reframed</td><td>Lab notebook</td></tr>
+        <tr><td data-rec="Phase 3a">CREMA-D real-data feasibility gate</td><td class="fail">▼ Fixed-centre-crop floor failure; "crop made it worse" claim retracted (unseeded-draw noise). Gate A failed; sweep blocked.</td><td>Phase 3a</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="methods" aria-labelledby="methods-title">
+  <div class="eyebrow">04</div>
+  <h2 id="methods-title">Methods &amp; provenance</h2>
+  <div class="methods">
+    <p>Protocol throughout: <span data-v="meta.seeds" data-f="i">30</span> seeds, Holm-Bonferroni correction, paired t-tests governing ordering claims, pre-registration committed before results, bit-level determinism spot-checks before results were merged, and gates that blocked work when criteria failed, including one gate that stopped a planned sweep on real data and was not amended after the fact. Corrections are recorded in place (a retracted crop verdict, a corrected audio-tau reading, a winner's-curse correction on β selection). Five falsified predictions are logged as falsifications, not reframed. A manifest of the project record was externally timestamped (RFC 3161, DigiCert TSA, Oct 2 2026); that anchor is 'no later than' evidence only.</p>
+    <ul>
+      <li>~3,000 seeded runs</li>
+      <li><span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni</li>
+      <li>Determinism: 0.000000 / 0.00000000</li>
+      <li>▼ 1 gate blocked a sweep</li>
+    </ul>
+  </div>
+  <p class="methods__note">Interpretability, narrowly: "which sub-unit fired" is a discrete, auditable fact. Nothing stronger is claimed.</p>
+</section>
+
+<section class="sec" id="limits" aria-labelledby="limits-title">
+  <div class="eyebrow">05</div>
+  <h2 id="limits-title">Limits &amp; open controls</h2>
+  <ol class="limits">
+    <li>Mechanism mostly unexplained: <span data-v="partition.share.non_spatial" data-f="p1">65.6%</span> of the best advantage is non-spatial. Without a parameter-matched maxout control (designed but not run), 'Model III' may substantially be 'hard selection over a partition helps MLPs', closer to known maxout/mixture territory.</li>
+    <li>Missing controls (named, not designed here): Model II and a parameter-matched maxout control have not been run; nor have CIFAR N=20,000, a batch-size control at K≥32 (K = batch size 32; ≥50% structural dead-row floor at K=64), a dead-row census beyond one (N, seed) cell, a cue-amplitude sweep, or a patch-size sweep.</li>
+    <li>Baselines are weak by design: CIFAR-10 with no convolution (MLP tops at <span data-v="cifar.mlp_top" data-f="f4">0.4315</span>) and flattened MNIST. All claims are relative within that controlled class only; not evidence against modern architectures.</li>
+    <li>Temporal results are strictly 'at β=<span data-v="temporal.beta" data-f="f2">0.95</span>': in Exp 4, the temporal treatment and task difficulty are the same parameter.</li>
+    <li>CREMA-D margins are an open confound, not a result (unmasked readout over zero-padding; normalisation over the padded tensor). <a href="#spacetime">See Space × time.</a></li>
+  </ol>
+</section>
+
+<section class="sec" id="spacetime" aria-labelledby="spacetime-title">
+  <div class="eyebrow">06</div>
+  <h2 id="spacetime-title">Space × time and real data</h2>
+  <div class="spacetime">
+    <div class="spacetime__text">
+      <p>Unified 2×2 (K∈{1,4} × β∈{0,<span data-v="temporal.beta" data-f="f2">0.95</span>}): the spatial × temporal interaction is real and Holm-significant at every N ≥ 4000, peaking at N=8000 (Unified early_bit <span class="mono" data-v="temporal.early.unified.8000" data-f="f4">0.9129</span> at N=8000). But persistence costs count accuracy, growing with N: the unified model is a trade, not a strict improvement. <a href="#chartc">Chart C.</a></p>
+      <div class="red-block">
+        <div class="red-block__label">▼ NEGATIVE FEASIBILITY RESULT · TEXT ONLY</div>
+        <p>CREMA-D (real audiovisual emotion, Phase 3a): Gate B passed decisively (audiovisual 0.5191 vs best unimodal 0.4646, +0.0545 integration headroom). Gate A failed on video (+0.0141 at β=0.95 / +0.0146 at β=0.7165 vs +0.03 required; 95% CI [+0.0017, +0.0275]; video probe 0.4230; audio margin +0.0945; chance 0.1667; duration alone predicts emotion at 0.2312). The 2×2 sweep was blocked and the gate was not amended. Confounds: 25.9% of timesteps are zero-padding under an unmasked readout, and normalisation was computed over the padded tensor, so these margins are an open confound, not a result. This is a negative feasibility result.</p>
+      </div>
+    </div>
+    <figure class="schematic spacetime__fig">
+      <div class="schematic__label">D-F · SCHEMATIC · NOT DATA</div>
+      <svg viewBox="0 0 220 150" role="img" aria-label="A group drawn as a leaky accumulator with persistence beta 0.95.">
+        <path class="f-none s-ink" stroke-width="2" d="M70 30V110H150V30"/>
+        <rect class="f-g0" opacity=".85" x="72" y="62" width="76" height="46"/>
+        <path class="f-none s-ink" stroke-width="1.5" d="M110 8V28M104 22L110 30L116 22"/>
+        <path class="f-none s-base" stroke-width="1.5" stroke-dasharray="3 3" d="M150 100Q170 104 176 124"/>
+        <text class="t-mono t-ink2" font-size="10" x="122" y="20">input events</text>
+        <text class="t-mono t-ink2" font-size="10" x="160" y="140">leak</text>
+        <text class="t-mono" font-size="11" x="8" y="140">β=<tspan data-v="temporal.beta" data-f="f2">0.95</tspan> (persistence)</text>
+      </svg>
+      <figcaption>All temporal results are at β=<span data-v="temporal.beta" data-f="f2">0.95</span>.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec sec--about" id="about" aria-labelledby="about-title">
+  <div class="eyebrow">07</div>
+  <h2 id="about-title">About</h2>
+  <div class="about">
+    <p>Project Boreal is an independent research programme led by Shahin Zangenehpour. The research programme, its sequencing and every gating decision are Shahin's. Implementation was a collaboration with Claude Code; the research record attributes the work explicitly, and this page follows it. The connecting insight (Sardi et al. (2017) read as an ANN architecture) dates to Shahin's April 2018 article <a href="https://medium.com/@docteurzed/can-old-neurons-teach-us-new-tricks-2f8df9939057">'Can Old Neurons Teach Us New Tricks?'</a></p>
+    <p class="one-liner"><span class="one-liner__label">APPLICATION ONE-LINER</span> · Project Boreal: a pre-registered, ~3,000-run test of multi-threshold 'Model III' neurons vs matched MLPs; founding hypothesis falsified, K-N scaling law and a priced mechanism decomposition in its place.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span>© 2026 Shahin Zangenehpour. Results summary, draft of 19 October 2026. Underlying code and data not yet released.</span>
+    <span>Source: Sardi et al. (2017), Sci Rep 7, 18036. Original idea: Zangenehpour (2018), <a href="https://medium.com/@docteurzed/can-old-neurons-teach-us-new-tricks-2f8df9939057">'Can Old Neurons Teach Us New Tricks?'</a>, Medium.</span>
+    <span class="site-footer__version">Data version: <span data-v="meta.data_version">v1</span>. Most numbers on this page are generated from the locked run logs; the few typed by hand are checked by an automated test to appear in the written record.</span>
+  </div>
+</footer>
+
+</body>
+</html>
