@@ -17,14 +17,10 @@
   <div class="site-header__inner">
     <a class="site-title" href="#top">Project Boreal</a>
     <span class="pill">Independent research · 2026 · Research log summary</span>
-    <span class="spacer"></span>
-    <nav class="top-links" aria-label="Quick links">
-      <a href="#methods">Methods</a><span class="only-mob" aria-hidden="true">·</span><a href="#limits">Limits</a>
-    </nav>
   </div>
 </header>
 
-<nav class="sticky-nav only-desk" aria-label="Sections">
+<nav class="sticky-nav" aria-label="Sections">
   <div class="sticky-nav__inner">
     <a href="#idea">Idea</a>
     <a href="#results">Results</a>
@@ -37,30 +33,17 @@
   </div>
 </nav>
 
-<details class="mob-nav only-mob">
-  <summary>Sections ▾ <a class="mob-nav__fail" href="#failed">▼ What failed</a></summary>
-  <nav class="mob-nav__links" aria-label="Sections">
-    <a href="#idea">Idea</a>
-    <a href="#results">Results</a>
-    <a href="#why">Why it works (partly)</a>
-    <a href="#spacetime">Space × time</a>
-    <a href="#methods">Methods</a>
-    <a href="#limits">Limits</a>
-    <a href="#about">About</a>
-  </nav>
-</details>
-
 <main>
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero__text">
     <h1 id="hero-title">In a no-convolution MLP setting, a neuron split into independent sub-units beats a parameter-matched MLP… but only once there's enough data, and mostly not for the reason we expected.</h1>
-    <p class="lead only-desk">Project Boreal tests Sardi et al. (2017)'s 'neuron as multiple independent threshold units' as an ANN architecture: K input partitions, K independent thresholds, one hard max. Across ~3,000 seeded runs on MNIST and CIFAR-10, the advantage appears at moderate-to-large training-set sizes, the best K rises <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> as N goes 2,000 → 5,000 → 10,000, and only <span data-v="partition.share.compactness" data-f="p1">12.1%</span> of the best effect is cleanly spatial. Baselines are deliberately weak (no convolution); all claims are relative within that class. The original low-data hypothesis failed… and is reported first.</p>
+    <p class="lead">Project Boreal tests Sardi et al. (2017)'s 'neuron as multiple independent threshold units' as an ANN architecture: K input partitions, K independent thresholds, one hard max. The original low-data hypothesis failed… and is reported first. Across ~3,000 seeded runs on MNIST and CIFAR-10, the advantage appears at moderate-to-large training-set sizes, the best K rises <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> as N goes 2,000 → 5,000 → 10,000, and only <span data-v="partition.share.compactness" data-f="p1">12.1%</span> of the best effect is cleanly spatial. Baselines are deliberately weak (no convolution); all claims are relative within that class.</p>
     <ul class="chips">
+      <li class="chip-fail">▼ Founding hypothesis: falsified (reported below)</li>
       <li class="chip-win">CIFAR-10, K=16, N=10,000: <b data-v="cifar.delta.16.10000" data-f="s4">+0.0491</b> vs matched MLP</li>
       <li>Best K: <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> at N = 2,000 / 5,000 / 10,000</li>
       <li><span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-corrected · pre-registered</li>
-      <li class="chip-fail">▼ Founding hypothesis: falsified (reported below)</li>
     </ul>
     <div class="ctas">
       <a class="cta" href="#widget1">Explore the neuron ↓</a>
@@ -106,14 +89,12 @@
 <section class="thirty" aria-labelledby="thirty-title">
   <h2 id="thirty-title">In 30 seconds</h2>
   <ol>
-    <li><span class="thirty__n">1</span><span><b>Scaling law:</b> optimal K tracks N (best K <span class="mono" data-v="cifar.best_k.2000" data-f="i">4</span> → <span class="mono" data-v="cifar.best_k.5000" data-f="i">8</span> → <span class="mono" data-v="cifar.best_k.10000" data-f="i">16</span> at CIFAR N = <span class="mono">2000/5000/10000</span>); crossover points are roughly dataset-invariant (K=4 crosses at N≈<span class="mono">1000-2000</span> on both MNIST and CIFAR).</span></li>
-    <li><span class="thirty__n">2</span><span><b>Mechanism, priced:</b> of PATCHED's <span class="mono" data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span> advantage on CIFAR, <span class="mono" data-v="partition.share.non_spatial" data-f="p1">65.6%</span> survives destroying spatial structure entirely; spatial compactness cleanly accounts for <span class="mono" data-v="partition.share.compactness" data-f="p1">12.1%</span>.</span></li>
-    <li><span class="thirty__n">3</span><span><b>Space × time:</b> spatial partitioning × leaky-spiking temporal persistence interact with an inverted-U in N, peaking at N=<span class="mono">8000</span>… data efficiency, not a higher ceiling.</span></li>
-    <li class="thirty__fail"><span class="thirty__n">▼ 4</span><span><b>What failed:</b> the founding low-N advantage (reversed, <span class="mono" data-v="mnist.delta_k2.300" data-f="s3">-0.131</span> at MNIST N=300); the dead-gradient fix (soft aggregation worse at every N); latching (architecture integrates but cannot latch a discrete fact); CREMA-D real-data gate (failed on video, sweep blocked, gate not relaxed).</span></li>
+    <li class="thirty__fail"><span class="thirty__n">▼ 1</span> <span><b>What failed:</b> the founding low-N advantage (reversed, <span class="mono" data-v="mnist.delta_k2.300" data-f="s3">-0.131</span> at MNIST N=300); the dead-gradient fix (soft aggregation worse at every N); latching (architecture integrates but cannot latch a discrete fact); CREMA-D real-data gate (failed on video, sweep blocked, gate not relaxed).</span></li>
+    <li><span class="thirty__n">2</span> <span><b>Scaling law:</b> optimal K tracks N (best K <span class="mono" data-v="cifar.best_k.2000" data-f="i">4</span> → <span class="mono" data-v="cifar.best_k.5000" data-f="i">8</span> → <span class="mono" data-v="cifar.best_k.10000" data-f="i">16</span> at CIFAR N = <span class="mono">2000/5000/10000</span>); crossover points are roughly dataset-invariant (K=4 crosses at N≈<span class="mono">1000-2000</span> on both MNIST and CIFAR).</span></li>
+    <li><span class="thirty__n">3</span> <span><b>Mechanism, priced:</b> of PATCHED's <span class="mono" data-v="partition.delta.PATCHED" data-f="s4">+0.0613</span> advantage on CIFAR, <span class="mono" data-v="partition.share.non_spatial" data-f="p1">65.6%</span> survives destroying spatial structure entirely; spatial compactness cleanly accounts for <span class="mono" data-v="partition.share.compactness" data-f="p1">12.1%</span>.</span></li>
+    <li><span class="thirty__n">4</span> <span><b>Space × time:</b> spatial partitioning × leaky-spiking temporal persistence interact with an inverted-U in N, peaking at N=<span class="mono">8000</span>… data efficiency, not a higher ceiling.</span></li>
   </ol>
 </section>
-
-<p class="lead lead--mob only-mob">Project Boreal tests Sardi et al. (2017)'s 'neuron as multiple independent threshold units' as an ANN architecture: K input partitions, K independent thresholds, one hard max. Across ~3,000 seeded runs on MNIST and CIFAR-10, the advantage appears at moderate-to-large training-set sizes, the best K rises <span data-v="cifar.best_k.2000" data-f="i">4</span> → <span data-v="cifar.best_k.5000" data-f="i">8</span> → <span data-v="cifar.best_k.10000" data-f="i">16</span> as N goes 2,000 → 5,000 → 10,000, and only <span data-v="partition.share.compactness" data-f="p1">12.1%</span> of the best effect is cleanly spatial. Baselines are deliberately weak (no convolution); all claims are relative within that class. The original low-data hypothesis failed… and is reported first.</p>
 
 <section class="hero-mob only-mob" aria-label="Schematic of a Model III neuron">
   <figure class="schematic">
@@ -137,7 +118,7 @@
   <h2 id="idea-title">The idea: Model I vs Model III</h2>
   <div class="idea">
     <div class="idea__text">
-      <p>A conventional neuron sums all its inputs and applies one threshold. A Model III neuron<sup>¹</sup> first splits its inputs into K disjoint groups. Each group has its own independent threshold. The neuron then outputs the hard max over the groups… the strongest group wins, and groups never pool evidence before thresholding. The extra cost is only (K-1) extra biases per neuron (<span class="mono" data-v="cifar.extra_params.2.pct" data-f="sp3">+0.045%</span> of parameters at CIFAR K=2; <span class="mono" data-v="cifar.extra_params.16.pct" data-f="sp3">+0.675%</span> at K=16), so the comparison against a parameter-matched MLP isolates the neuron model itself.</p>
+      <p>A conventional neuron sums all its inputs and applies one threshold. A Model III neuron<sup>¹</sup> first splits its inputs into K disjoint groups. Each group has its own independent threshold. The neuron then outputs the hard max over the groups… the strongest group wins, and groups never pool evidence before thresholding. The extra cost is only (K-1) extra biases per neuron (<span class="mono" data-v="cifar.extra_params.2.pct" data-f="sp3">+0.045%</span> of parameters at CIFAR K=2; <span class="mono" data-v="cifar.extra_params.16.pct" data-f="sp3">+0.675%</span> at K=16), so the parameter-matched MLP it is compared against differs only in the neuron model.</p>
       <ol>
         <li>K disjoint groups of inputs.</li>
         <li>An independent threshold per group.</li>
@@ -679,8 +660,9 @@
   <div class="eyebrow">04</div>
   <h2 id="methods-title">Methods &amp; provenance</h2>
   <div class="methods">
-    <p>Protocol throughout: <span data-v="meta.seeds" data-f="i">30</span> seeds, Holm-Bonferroni correction, paired t-tests governing ordering claims, pre-registration committed before results, bit-level determinism spot-checks before results were merged, and gates that blocked work when criteria failed, including one gate that stopped a planned sweep on real data and was not amended after the fact. Corrections are recorded in place (a retracted crop verdict, a corrected audio-tau reading, a winner's-curse correction on β selection). Five falsified predictions are logged as falsifications, not reframed. A manifest of the project record was externally timestamped (RFC 3161, DigiCert TSA, Oct 2 2026); that anchor is 'no later than' evidence only.</p>
+    <p>Protocol: <span data-v="meta.seeds" data-f="i">30</span> seeds per configuration in all nine experiments (the CREMA-D real-data gate used 3 seeds, and its β search 2), Holm-Bonferroni correction, paired t-tests governing ordering claims, pre-registration committed before results, bit-level determinism spot-checks before results were merged, and gates that blocked work when criteria failed, including one gate that stopped a planned sweep on real data and was not amended after the fact. Corrections are recorded in place (a retracted crop verdict, a corrected audio-tau reading, a winner's-curse correction on β selection). Five falsified predictions are logged as falsifications, not reframed. A manifest of the project record was externally timestamped (RFC 3161, DigiCert TSA, Oct 2 2026); that anchor is 'no later than' evidence only.</p>
     <ul>
+      <li>9 pre-registered experiments (Exp 1 to 4b)</li>
       <li>~3,000 seeded runs</li>
       <li><span data-v="meta.seeds" data-f="i">30</span> seeds · Holm-Bonferroni</li>
       <li>Determinism: 0.000000 / 0.00000000</li>
@@ -695,7 +677,7 @@
   <h2 id="limits-title">Limits &amp; open controls</h2>
   <ol class="limits">
     <li>Mechanism mostly unexplained: <span data-v="partition.share.non_spatial" data-f="p1">65.6%</span> of the best advantage is non-spatial. Without a parameter-matched maxout control (designed but not run), 'Model III' may substantially be 'hard selection over a partition helps MLPs', closer to known maxout/mixture territory.</li>
-    <li>Missing controls (named, not designed here): Model II and a parameter-matched maxout control have not been run; nor have CIFAR N=20,000, a batch-size control at K≥32 (K = batch size 32; ≥50% structural dead-row floor at K=64), a dead-row census beyond one (N, seed) cell, a cue-amplitude sweep, or a patch-size sweep.</li>
+    <li>Missing controls (named, not designed here): Model II and a parameter-matched maxout control have not been run; nor have CIFAR N=20,000, a batch-size control at K≥32 (batch size was held at 32 for every K, so K=32 equals the batch size and K=64 has a ≥50% structural dead-row floor), a dead-row census beyond one (N, seed) cell, a cue-amplitude sweep, or a patch-size sweep.</li>
     <li>Baselines are weak by design: CIFAR-10 with no convolution (MLP tops at <span data-v="cifar.mlp_top" data-f="f4">0.4315</span>) and flattened MNIST. All claims are relative within that controlled class only; not evidence against modern architectures.</li>
     <li>Temporal results are strictly 'at β=<span data-v="temporal.beta" data-f="f2">0.95</span>': in Exp 4, the temporal treatment and task difficulty are the same parameter.</li>
     <li>CREMA-D margins are an open confound, not a result (unmasked readout over zero-padding; normalisation over the padded tensor). <a href="#spacetime">See Space × time.</a></li>
@@ -734,7 +716,6 @@
   <h2 id="about-title">About</h2>
   <div class="about">
     <p>Project Boreal is an independent research programme led by Shahin Zangenehpour. The research programme, its sequencing and every gating decision are Shahin's. Implementation was a collaboration with Claude Code; the research record attributes the work explicitly, and this page follows it. The connecting insight (Sardi et al. (2017) read as an ANN architecture) dates to Shahin's April 2018 article <a href="https://medium.com/@docteurzed/can-old-neurons-teach-us-new-tricks-2f8df9939057">'Can Old Neurons Teach Us New Tricks?'</a></p>
-    <p class="one-liner"><span class="one-liner__label">APPLICATION ONE-LINER</span> · Project Boreal: a pre-registered, ~3,000-run test of multi-threshold 'Model III' neurons vs matched MLPs; founding hypothesis falsified, K-N scaling law and a priced mechanism decomposition in its place.</p>
   </div>
 </section>
 
@@ -742,7 +723,7 @@
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <span>© 2026 Shahin Zangenehpour. Results summary, draft of 19 October 2026. Underlying code and data not yet released.</span>
+    <span>© 2026 Shahin Zangenehpour. Results summary, last updated 22 November 2026. Underlying code and data not yet released.</span>
     <span>Source: Sardi et al. (2017), Sci Rep 7, 18036. Original idea: Zangenehpour (2018), <a href="https://medium.com/@docteurzed/can-old-neurons-teach-us-new-tricks-2f8df9939057">'Can Old Neurons Teach Us New Tricks?'</a>, Medium.</span>
     <span class="site-footer__version">Data version: <span data-v="meta.data_version">v1</span>. Most numbers on this page are generated from the locked run logs; the few typed by hand are checked by an automated test to appear in the written record.</span>
   </div>
