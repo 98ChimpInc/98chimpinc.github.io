@@ -31,7 +31,8 @@
 }
 
 * { box-sizing: border-box; }
-html { background: var(--paper); }
+/* Keep anchor targets clear of the sticky section nav (about 47px tall). */
+html { background: var(--paper); scroll-padding-top: 48px; }
 body {
   margin: 0;
   min-height: 100vh;
@@ -91,8 +92,6 @@ h1, h2, h3, p, figure { margin: 0; }
   font-family: var(--mono); font-size: 12px; color: var(--ink2);
   border: 1px solid var(--rule); border-radius: 999px; padding: 3px 12px;
 }
-.spacer { flex: 1; }
-.top-links { display: flex; gap: 20px; font-size: 15px; }
 
 .sticky-nav {
   position: sticky; top: 0; z-index: 5;
@@ -104,15 +103,6 @@ h1, h2, h3, p, figure { margin: 0; }
   font-size: 14px; color: var(--ink2);
 }
 .sticky-nav__fail { color: var(--fail); font-weight: 600; }
-
-.mob-nav { border-bottom: 1px solid var(--rule); padding: 0 16px; }
-.mob-nav summary {
-  min-height: 44px; display: flex; align-items: center; font-size: 14px;
-  list-style: none; cursor: pointer;
-}
-.mob-nav summary::-webkit-details-marker { display: none; }
-.mob-nav__fail { margin-left: auto; color: var(--fail); font-weight: 600; }
-.mob-nav__links { padding-bottom: 10px; font-size: 14px; display: grid; gap: 6px; }
 
 main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 
@@ -157,7 +147,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 .thirty__n { font-family: var(--mono); color: var(--accent-ink); font-weight: 600; flex: none; }
 .thirty .thirty__fail {
   background: var(--fail-soft); border-left: 4px solid var(--fail);
-  padding: 12px 14px; margin: 4px -14px 0;
+  padding: 12px 14px; margin: 0 -14px 4px;
 }
 .thirty__fail .thirty__n, .thirty__fail b { color: var(--fail); }
 
@@ -384,8 +374,6 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 
 /* 07 About */
 .about p { max-width: 820px; }
-.about .one-liner { margin: 20px 0 0; font-size: 14px; color: var(--ink2); border-top: 1px solid var(--rule); padding-top: 12px; }
-.one-liner__label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--rule-strong); margin-top: 24px; }
@@ -403,14 +391,17 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
   .site-header__inner { padding: 14px 16px; gap: 6px 12px; }
   .site-title { font-size: 18px; }
   .pill { order: 1; flex-basis: 100%; border: 0; border-radius: 0; padding: 0; font-size: 11px; }
-  .top-links { font-size: 13px; gap: 4px; }
+
+  .sticky-nav__inner { padding: 0 16px; gap: 18px; }
+  .sticky-nav__inner a { padding: 12px 0; }
+  .sticky-nav__fail { order: -1; }
 
   .hero { flex-direction: column; gap: 16px; padding: 24px 0; }
   .hero__text { flex: none; gap: 16px; }
   .hero h1 { font-size: 30px; line-height: 1.15; }
+  .lead { font-size: 15px; }
   .chips { gap: 6px; font-size: 12px; }
   .chips li { padding: 5px 8px; }
-  .chips .chip-fail { order: -1; }
   .ctas { gap: 8px; flex-wrap: nowrap; }
   .cta { flex: 1 1 0; padding: 11px 8px; font-size: 15px; text-align: center; }
 
@@ -419,7 +410,6 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
   .thirty ol { margin: 0; gap: 12px; font-size: 14px; }
   .thirty li { gap: 10px; }
   .thirty .thirty__fail { padding: 10px; margin: 0 -6px; }
-  .lead--mob { padding: 24px 0 0; font-size: 15px; }
   .hero-mob { padding: 24px 0; }
   .hero-mob .schematic { padding: 12px; }
   .hero-mob__inner { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
